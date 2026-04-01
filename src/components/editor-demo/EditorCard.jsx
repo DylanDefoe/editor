@@ -1,17 +1,16 @@
-
 import { Button, Card, Space } from "antd";
-import RichTextEditor from "./RichTextEditor";
 import PreviewCard from "./PreviewCard";
+import RichTextEditor from "./RichTextEditor";
 
-export default function Editor({
+export default function EditorCard({
   // 编辑器序号
   index,
   // 编辑器 HTML 内容
   value,
   // 内容变化回调
   onChange,
-  // 编辑器创建后回调
-  onCreated,
+  // 编辑器实例挂载回调，返回值可选为销毁清理函数
+  onEditorMount,
   // beforeinput 事件回调
   onBeforeInput,
   // 复制当前编辑器
@@ -31,7 +30,7 @@ export default function Editor({
         <RichTextEditor
           value={value}
           onChange={onChange}
-          onCreated={onCreated}
+          onMount={onEditorMount}
           onBeforeInput={onBeforeInput}
         />
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Editor, Toolbar } from "@wangeditor/editor-for-react";
 
 function RichTextEditor({
@@ -6,12 +6,54 @@ function RichTextEditor({
   value,
   // 内容变化回调
   onChange,
-  // 编辑器创建后回调
-  onCreated,
+  // 编辑器实例挂载回调，返回值可选为销毁清理函数
+  onMount,
   // beforeinput 事件回调
   onBeforeInput,
 }) {
   const [editor, setEditor] = useState(null);
+
+  // 通过 memo 保持配置引用稳定，避免不必要重渲染。
+  const editorConfig = useMemo(
+    () => ({
+      placeholder: "请输入内容...",
+      MENU_CONF: {},
+    }),
+    [],
+  );
+
+  const variableToolbarConfig = useMemo(
+    () => ({
+      toolbarKeys: [
+        "variableColor",
+        "variableBackgroundColor",
+        "|",
+        "variableFontSize",
+        "variableFontFamily",
+        "|",
+        "variableBold",
+        "variableItalic",
+        "variableUnderline",
+        "variableStrikeThrough",
+        "|",
+        "variableClearStyle",
+      ],
+    }),
+    [],
+  );
+
+  useEffect(() => {
+    if (!editor) {
+      return undefined;
+    }
+
+    const dispose = onMount?.(editor);
+    return () => {
+      if (typeof dispose === "function") {
+        dispose();
+      }
+    };
+  }, [editor, onMount]);
 
   useEffect(() => {
     return () => {
@@ -23,12 +65,12 @@ function RichTextEditor({
 
   useEffect(() => {
     if (!editor) {
-      return;
+      return undefined;
     }
 
     const editableContainer = editor.getEditableContainer();
     if (!editableContainer) {
-      return;
+      return undefined;
     }
 
     const handleBeforeInput = (event) => {
@@ -45,17 +87,29 @@ function RichTextEditor({
     <div className="editor-shell">
       <Toolbar
         editor={editor}
-        defaultConfig={{}}
+        mode="default"
+        style={{ borderBottom: "1px solid #f0f0f0", marginBottom: 8 }}
+      />
+      <div
+        style={{
+          fontSize: 12,
+          color: "#8c8c8c",
+          marginBottom: 6,
+          paddingLeft: 6,
+        }}
+      >
+        变量样式
+      </div>
+      <Toolbar
+        editor={editor}
+        defaultConfig={variableToolbarConfig}
         mode="default"
         style={{ borderBottom: "1px solid #f0f0f0" }}
       />
       <Editor
-        defaultConfig={{ placeholder: "请输入内容..." }}
+        defaultConfig={editorConfig}
         value={value}
-        onCreated={(instance) => {
-          setEditor(instance);
-          onCreated?.(instance);
-        }}
+        onCreated={setEditor}
         onChange={(instance) => {
           onChange(instance.getHtml());
         }}

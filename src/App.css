@@ -12,6 +12,7 @@
 
 .editor-demo-card {
   border-radius: 8px;
+  
 }
 
 .editor-shell {
@@ -24,6 +25,8 @@
 
 .variable-panel {
   height: 100%;
+  position: fixed;
+  right: 20px;
 }
 
 .variable-item {
