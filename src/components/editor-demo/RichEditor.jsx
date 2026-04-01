@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Editor, Toolbar } from "@wangeditor/editor-for-react";
 
-function RichTextEditor({
+function RichEditor({
   // 编辑器 HTML 内容
   value,
   // 内容变化回调
@@ -120,4 +120,4 @@ function RichTextEditor({
   );
 }
 
-export default RichTextEditor;
+export default RichEditor;

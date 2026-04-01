@@ -1,6 +1,6 @@
 import { Button, Card, Space } from "antd";
 import PreviewCard from "./PreviewCard";
-import RichTextEditor from "./RichTextEditor";
+import RichEditor from "./RichEditor";
 
 export default function EditorCard({
   // 编辑器序号
@@ -27,7 +27,7 @@ export default function EditorCard({
       className="editor-demo-card"
     >
       <Space direction="vertical" size={12} style={{ width: "100%" }}>
-        <RichTextEditor
+        <RichEditor
           value={value}
           onChange={onChange}
           onMount={onEditorMount}
