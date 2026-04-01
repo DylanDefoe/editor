@@ -21,19 +21,20 @@ function useVariableActions({
       return;
     }
 
-    currentEditor.focus();
+    // 还原选区
+    currentEditor.restoreSelection();
 
     // mention 场景下删除光标前的触发字符（如 @）
     if (deleteMention) {
-      currentEditor.deleteBackward('character');
+      currentEditor.deleteBackward("character");
     }
 
     // 创建并插入变量节点（void inline element）
     const variableNode = createVariableNode(key);
-    SlateTransforms.insertNodes(currentEditor, variableNode);
+    currentEditor.insertNode(variableNode);
 
     // 移动光标到变量后面
-    SlateTransforms.move(currentEditor);
+    currentEditor.move(1);
   }, []);
 
   return {

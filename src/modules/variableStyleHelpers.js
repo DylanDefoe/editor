@@ -1,5 +1,4 @@
-import { DomEditor, SlateTransforms } from "@wangeditor/editor";
-import { VARIABLE_ELEMENT_TYPE } from "../config/editorConfig";
+import { SlateEditor, SlateTransforms } from "@wangeditor/editor";
 import { isVariableNode } from "../utils/variableNodeUtils";
 import { EMPTY_VALUE } from "./variableStyleConstants";
 
@@ -25,12 +24,15 @@ export const getSelectedVariableEntry = (editor) => {
   if (!editor?.selection) {
     return null;
   }
-  const node = DomEditor.getSelectedNodeByType(editor, VARIABLE_ELEMENT_TYPE);
-  if (!node || !isVariableNode(node)) {
+  const entry = SlateEditor.above(editor, {
+    match: (node) => isVariableNode(node),
+    at: editor.selection,
+  });
+  if (!entry) {
     return null;
   }
-  const path = DomEditor.findPath(editor, node);
-  return path ? [node, path] : null;
+  const [node, path] = entry;
+  return [node, path];
 };
 
 /**
@@ -141,10 +143,11 @@ export const buildVariableStyleObject = (node = {}) => {
   }
 
   if (styles.color) styleObject.color = styles.color;
-  if (styles.backgroundColor) styleObject.backgroundColor = styles.backgroundColor;
+  if (styles.backgroundColor)
+    styleObject.backgroundColor = styles.backgroundColor;
   if (styles.fontSize) styleObject.fontSize = styles.fontSize;
   if (styles.fontFamily) styleObject.fontFamily = styles.fontFamily;
-  
+
   return styleObject;
 };
 
