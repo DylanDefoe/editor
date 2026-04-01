@@ -7,9 +7,7 @@ import {
   VARIABLE_ELEMENT_TYPE,
   VARIABLE_TOKEN_CONFIG,
 } from "../config/editorConfig";
-import {
-  isVariableNode,
-} from "../utils/variableNodeUtils";
+import { isVariableNode } from "../utils/variableNodeUtils";
 import {
   buildVariableStyleObject,
   mergeVariableStyles,
@@ -17,7 +15,6 @@ import {
   styleObjectToCssText,
   VARIABLE_BASE_STYLE,
 } from "./variableStyleHelpers";
-import { registerVariableStyleMenus } from "./variableStyleMenus";
 
 /**
  * 创建变量显示文本
@@ -125,12 +122,6 @@ function registerVariableElement() {
 
     return editor;
   });
-
-  // 注册变量样式菜单
-  registerVariableStyleMenus();
 }
-
-// 自动注册
-registerVariableElement();
 
 export { registerVariableElement };
