@@ -1,4 +1,4 @@
-import { VARIABLE_ELEMENT_TYPE, VARIABLE_TOKEN_CONFIG } from "../config/editorConfig";
+import { VARIABLE_ELEMENT_TYPE } from "../config/editorConfig";
 
 /**
  * 创建变量节点
@@ -10,13 +10,10 @@ export const createVariableNode = (key) => {
     throw new Error("Variable key is required");
   }
 
-  // 构建显示文本
-  const displayText = `${VARIABLE_TOKEN_CONFIG.prefix}${key}${VARIABLE_TOKEN_CONFIG.suffix}`;
-
   return {
     type: VARIABLE_ELEMENT_TYPE,
     key,
-    children: [{ text: displayText }],
+    children: [{ text: "" }],
   };
 };
 

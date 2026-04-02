@@ -15,6 +15,7 @@ import {
   styleObjectToCssText,
   VARIABLE_BASE_STYLE,
 } from "./variableStyleHelpers";
+import { DomEditor } from "@wangeditor/editor";
 
 /**
  * 创建变量显示文本
@@ -26,7 +27,7 @@ const createVariableDisplayText = (key) => {
 /**
  * 创建变量元素的 VNode
  */
-const createVariableVNode = (elemNode, children) => {
+const createVariableVNode = (elemNode, children, editor) => {
   const { key = "" } = elemNode;
   const childrenArray = [{ text: createVariableDisplayText(key) }];
 
@@ -34,6 +35,9 @@ const createVariableVNode = (elemNode, children) => {
   if (children) {
     childrenArray.push(children);
   }
+
+  // 当前节点是否选中
+  const selected = DomEditor.isNodeSelected(editor, elemNode);
 
   const vNode = {
     attrs: {
@@ -44,6 +48,7 @@ const createVariableVNode = (elemNode, children) => {
     style: {
       ...VARIABLE_BASE_STYLE,
       ...buildVariableStyleObject(elemNode),
+      border: selected ? "2px solid #B4D5FF" : "2px solid transparent",
     },
   };
 
@@ -61,9 +66,7 @@ function registerVariableElement() {
   // 注册渲染器
   Boot.registerRenderElem({
     type: VARIABLE_ELEMENT_TYPE,
-    renderElem: (elemNode, children) => {
-      return createVariableVNode(elemNode, children);
-    },
+    renderElem: createVariableVNode,
   });
 
   // 注册 HTML 序列化：将变量节点转换为 HTML
