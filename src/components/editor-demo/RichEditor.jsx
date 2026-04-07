@@ -88,23 +88,14 @@ function RichEditor({
       <Toolbar
         editor={editor}
         mode="default"
-        style={{ borderBottom: "1px solid #f0f0f0", marginBottom: 8 }}
+        className="editor-toolbar"
       />
-      <div
-        style={{
-          fontSize: 12,
-          color: "#8c8c8c",
-          marginBottom: 6,
-          paddingLeft: 6,
-        }}
-      >
-        变量样式
-      </div>
+      <div className="variable-toolbar-label">变量样式</div>
       <Toolbar
         editor={editor}
         defaultConfig={variableToolbarConfig}
         mode="default"
-        style={{ borderBottom: "1px solid #f0f0f0" }}
+        className="variable-toolbar"
       />
       <Editor
         defaultConfig={editorConfig}
@@ -114,7 +105,7 @@ function RichEditor({
           onChange(instance.getHtml());
         }}
         mode="default"
-        style={{ height: 320, overflowY: "hidden" }}
+        className="editor-content"
       />
     </div>
   );

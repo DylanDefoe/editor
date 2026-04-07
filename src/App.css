@@ -122,3 +122,24 @@
   white-space: pre-wrap;
   word-break: break-word;
 }
+
+.variable-toolbar-label {
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-bottom: 6px;
+  padding-left: 6px;
+}
+
+.variable-toolbar {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.editor-toolbar {
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 8px;
+}
+
+.editor-content {
+  height: 320px;
+  overflow-y: hidden;
+}

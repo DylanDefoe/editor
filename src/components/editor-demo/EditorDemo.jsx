@@ -1,5 +1,5 @@
 import { Layout, Space } from "antd";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import VariablePresetPanel from "./VariablePresetPanel";
 import {
   VARIABLE_PRESETS,
@@ -49,6 +49,25 @@ function EditorDemo() {
     [insertVariable],
   );
 
+  const handleEditorChange = useCallback(
+    (id) =>
+      (nextHtml) => {
+        updateEditorHtml(id, nextHtml);
+        syncActiveEditor();
+      },
+    [updateEditorHtml, syncActiveEditor],
+  );
+
+  const editorCards = useMemo(
+    () =>
+      editorItems.map((item, index) => ({
+        id: item.id,
+        index,
+        html: item.html,
+      })),
+    [editorItems],
+  );
+
   return (
     <>
       <Layout className="editor-demo-layout">
@@ -66,16 +85,13 @@ function EditorDemo() {
             onClose={closeMention}
           />
           <Space direction="vertical" size={16} style={{ width: "100%" }}>
-            {editorItems.map((item, index) => {
+            {editorCards.map((item) => {
               return (
                 <EditorCard
                   key={item.id}
-                  index={index}
+                  index={item.index}
                   value={item.html}
-                  onChange={(nextHtml) => {
-                    updateEditorHtml(item.id, nextHtml);
-                    syncActiveEditor();
-                  }}
+                  onChange={handleEditorChange(item.id)}
                   onEditorMount={registerEditor}
                   onBeforeInput={handleEditorBeforeInput}
                   onCopy={() => {
