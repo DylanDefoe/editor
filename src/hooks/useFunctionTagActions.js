@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback } from "react";
 import {
   createFunctionTagEndNode,
   createFunctionTagStartNode,
 } from "../utils/functionTagNodeUtils";
+import useEditorRef from "./useEditorRef";
 
 /**
  * 在 inline-void 节点后移动光标并插入正文文本。
@@ -18,11 +19,7 @@ const insertTextAfterInlineVoid = (editor, text) => {
 function useFunctionTagActions({
   editor,
 } = {}) {
-  const editorRef = useRef(null);
-
-  useEffect(() => {
-    editorRef.current = editor;
-  }, [editor]);
+  const editorRef = useEditorRef(editor);
 
   const insertFunctionTag = useCallback(
     (condition, bodyText, deleteMention = false) => {
@@ -48,7 +45,7 @@ function useFunctionTagActions({
       currentEditor.insertNode(functionTagEndNode);
       currentEditor.move(1);
     },
-    [],
+    [editorRef],
   );
 
   return {

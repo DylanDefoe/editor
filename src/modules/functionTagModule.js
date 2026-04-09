@@ -11,6 +11,9 @@ import { VARIABLE_BASE_STYLE } from "./variableStyleHelpers";
 
 const SELECTED_BORDER_STYLE = "2px solid #B4D5FF";
 const UNSELECTED_BORDER_STYLE = "2px solid transparent";
+const FUNCTION_TAG_TEXT = Object.freeze({
+  end: "{{/}}",
+});
 
 const normalizeCondition = (condition) => {
   return typeof condition === "string" ? condition.trim() : "";
@@ -30,7 +33,7 @@ const escapeHtmlAttribute = (value) => {
 };
 
 const createFunctionTagStartText = (condition) => `{{? ${condition} }}`;
-const createFunctionTagEndText = () => "{{/}}";
+const createFunctionTagEndText = () => FUNCTION_TAG_TEXT.end;
 
 const createFunctionTagStyle = (selected) => {
   return {

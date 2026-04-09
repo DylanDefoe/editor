@@ -1,6 +1,31 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { VARIABLE_MENTION_CONFIG } from "../../config/editorConfig";
 
+/**
+ * 根据关键字过滤 mention 选项。
+ */
+const filterMentionOptions = (variables = [], keyword = "") => {
+  const normalizedKeyword = keyword.trim().toLowerCase();
+
+  if (!normalizedKeyword) {
+    return variables;
+  }
+
+  return variables.filter((item) => {
+    return (
+      item.key.toLowerCase().includes(normalizedKeyword) ||
+      item.label.toLowerCase().includes(normalizedKeyword)
+    );
+  });
+};
+
+const isNavigableOptionIndex = (index, optionsCount) => {
+  return optionsCount > 0 && index >= 0 && index < optionsCount;
+};
+
+/**
+ * mention 下拉：支持搜索、键盘导航和点击外部关闭。
+ */
 function VariableMention({
   // 是否显示
   open,
@@ -18,10 +43,17 @@ function VariableMention({
   const [searchValue, setSearchValue] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const options = useMemo(() => {
+    return filterMentionOptions(variables, searchValue);
+  }, [searchValue, variables]);
+
+  const optionsCount = options.length;
+
   useEffect(() => {
     if (!open) {
       return;
     }
+
     inputRef.current?.focus();
 
     // 点击弹层外部关闭弹层
@@ -43,46 +75,35 @@ function VariableMention({
     };
   }, [onClose, open]);
 
+  const safeActiveIndex = optionsCount
+    ? Math.min(activeIndex, optionsCount - 1)
+    : 0;
 
-  const options = useMemo(() => {
-    const keyword = searchValue.trim().toLowerCase();
-    if (!keyword) {
-      return variables;
-    }
-
-    return variables.filter((item) => {
-      return (
-        item.key.toLowerCase().includes(keyword) ||
-        item.label.toLowerCase().includes(keyword)
-      );
-    });
-  }, [searchValue, variables]);
-
-  const handleKeyDown = (event) => {
+  const handleKeyDown = useCallback((event) => {
     if (event.key === "ArrowDown") {
       event.preventDefault();
-      if (!options.length) {
+      if (!optionsCount) {
         return;
       }
-      setActiveIndex((prev) => (prev + 1) % options.length);
+      setActiveIndex((prev) => (prev + 1) % optionsCount);
       return;
     }
 
     if (event.key === "ArrowUp") {
       event.preventDefault();
-      if (!options.length) {
+      if (!optionsCount) {
         return;
       }
-      setActiveIndex((prev) => (prev - 1 + options.length) % options.length);
+      setActiveIndex((prev) => (prev - 1 + optionsCount) % optionsCount);
       return;
     }
 
     if (event.key === "Enter") {
       event.preventDefault();
-      if (!options.length) {
+      if (!isNavigableOptionIndex(safeActiveIndex, optionsCount)) {
         return;
       }
-      onSelect(options[activeIndex].key);
+      onSelect(options[safeActiveIndex].key);
       return;
     }
 
@@ -90,7 +111,7 @@ function VariableMention({
       event.preventDefault();
       onClose?.();
     }
-  };
+  }, [onClose, onSelect, options, optionsCount, safeActiveIndex]);
 
   if (!open) {
     return null;
@@ -124,7 +145,7 @@ function VariableMention({
           <div className="mention-empty">暂无匹配变量</div>
         ) : (
           options.map((option, index) => {
-            const isActive = index === activeIndex;
+            const isActive = index === safeActiveIndex;
 
             return (
               <div

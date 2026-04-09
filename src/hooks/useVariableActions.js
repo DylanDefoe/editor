@@ -1,17 +1,15 @@
-import { useCallback, useEffect, useRef } from "react";
-import { SlateTransforms } from "@wangeditor/editor";
+import { useCallback } from "react";
 import { createVariableNode } from "../utils/variableNodeUtils";
+import useEditorRef from "./useEditorRef";
 
+/**
+ * 提供变量节点插入动作。
+ */
 function useVariableActions({
   // 编辑器实例
   editor,
 } = {}) {
-  // 统一通过 ref 持有 editor，避免外部回调在闭包中拿到旧实例
-  const editorRef = useRef(null);
-
-  useEffect(() => {
-    editorRef.current = editor;
-  }, [editor]);
+  const editorRef = useEditorRef(editor);
 
   // 插入变量节点
   const insertVariable = useCallback((key, deleteMention) => {
@@ -35,7 +33,7 @@ function useVariableActions({
 
     // 移动光标到变量后面
     currentEditor.move(1);
-  }, []);
+  }, [editorRef]);
 
   return {
     insertVariable,

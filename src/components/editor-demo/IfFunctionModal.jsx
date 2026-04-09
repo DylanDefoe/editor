@@ -1,51 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
 import { Form, Mentions, Modal, Select } from "antd";
+import {
+  buildConditionFromFields,
+  normalizeOperand,
+  parseConditionToFields,
+} from "../../utils/ifConditionUtils";
 
 const OPERATOR_OPTIONS = ["==", "!=", ">", ">=", "<", "<="];
-const CONDITION_OPERATORS = [">=", "<=", "==", "!=", ">", "<"];
 
-const normalizeOperand = (value) => {
-  return String(value || "")
-    .trim()
-    .replace(/^@+/, "");
-};
+const normalizeMentionOption = (item) => {
+  const value = item?.key ?? item?.value;
+  const label = item?.label ?? value;
 
-const parseConditionToFields = (condition) => {
-  const normalizedCondition = String(condition || "").trim();
-
-  if (!normalizedCondition) {
-    return {
-      leftOperand: "",
-      operator: undefined,
-      rightOperand: "",
-    };
-  }
-
-  for (const operator of CONDITION_OPERATORS) {
-    const index = normalizedCondition.indexOf(operator);
-
-    if (index <= 0) {
-      continue;
-    }
-
-    const leftOperand = normalizedCondition.slice(0, index).trim();
-    const rightOperand = normalizedCondition
-      .slice(index + operator.length)
-      .trim();
-
-    if (leftOperand && rightOperand) {
-      return {
-        leftOperand,
-        operator,
-        rightOperand,
-      };
-    }
+  if (value === undefined || value === null || value === "") {
+    return null;
   }
 
   return {
-    leftOperand: normalizedCondition,
-    operator: undefined,
-    rightOperand: "",
+    value,
+    label,
   };
 };
 
@@ -63,21 +36,7 @@ function IfFunctionModal({
   const [saving, setSaving] = useState(false);
 
   const mentionOptions = useMemo(() => {
-    return (variables ?? [])
-      .map((item) => {
-        const value = item?.key ?? item?.value;
-        const label = item?.label ?? value;
-
-        if (value === undefined || value === null || value === "") {
-          return null;
-        }
-
-        return {
-          value,
-          label,
-        };
-      })
-      .filter(Boolean);
+    return (variables ?? []).map(normalizeMentionOption).filter(Boolean);
   }, [variables]);
 
   const validateMentionField = (_, value) => {
@@ -90,10 +49,7 @@ function IfFunctionModal({
 
   const handleOk = async () => {
     const values = await form.validateFields();
-    const leftOperand = normalizeOperand(values.leftOperand);
-    const operator = values.operator;
-    const rightOperand = normalizeOperand(values.rightOperand);
-    const condition = `${leftOperand} ${operator} ${rightOperand}`;
+    const condition = buildConditionFromFields(values);
 
     try {
       setSaving(true);

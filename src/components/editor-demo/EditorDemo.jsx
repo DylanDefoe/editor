@@ -3,7 +3,6 @@ import VariablePresetPanel from "./VariablePresetPanel";
 import {
   VARIABLE_PRESETS,
   EDITOR_DEFAULT_VALUE,
-  FUNCTION_TAG_PRESET_TYPE,
 } from "../../config/editorConfig";
 import EditorCard from "./EditorCard";
 import useVariableMention from "../../hooks/useVariableMention";
@@ -15,6 +14,10 @@ import useEditorItems from "../../hooks/useEditorItems";
 import IfFunctionModal from "./IfFunctionModal";
 import useIfFunctionModalController from "../../hooks/useIfFunctionModalController";
 import useEditorCardHandlers from "../../hooks/useEditorCardHandlers";
+import {
+  getMentionVariables,
+  isFunctionTagPreset,
+} from "../../utils/variablePresetUtils";
 
 /**
  * 编辑器演示页：负责拼装变量面板、mention、IF 弹窗和多编辑器卡片。
@@ -65,7 +68,7 @@ function EditorDemo() {
 
   const handleVariableClick = useCallback(
     (preset) => {
-      if (preset?.type === FUNCTION_TAG_PRESET_TYPE) {
+      if (isFunctionTagPreset(preset)) {
         openForCreate();
         return;
       }
@@ -96,13 +99,7 @@ function EditorDemo() {
 
   const mentionVariables = useMemo(
     () =>
-      VARIABLE_PRESETS.filter(
-        (preset) => preset?.type !== FUNCTION_TAG_PRESET_TYPE,
-      ).map((item) => ({
-        label: item.label,
-        value: item.key,
-        key: item.key,
-      })),
+      getMentionVariables(VARIABLE_PRESETS),
     [],
   );
 
