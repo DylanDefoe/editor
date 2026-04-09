@@ -261,7 +261,7 @@ body {
 }
 
 .editor-content {
-  min-height: 240px;
+  height: 300px;
 }
 
 .editor-content .w-e-text-container {

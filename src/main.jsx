@@ -1,12 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import '@wangeditor/editor/dist/css/style.css'
-import './index.css'
-import './modules/variableInit'
-import App from './App.jsx'
+import { StrictMode } from "react";
+import { render } from "react-dom";
+import "antd/dist/antd.css";
+import "@wangeditor/editor/dist/css/style.css";
+import "./index.css";
+import "./modules/variableInit";
+import App from "./App.jsx";
+import zhCN from 'antd/es/locale/zh_CN';
+import { ConfigProvider } from "antd";
 
-createRoot(document.getElementById('root')).render(
+render(
   <StrictMode>
-    <App />
+    <ConfigProvider
+      locale={zhCN}
+    >
+      <App />
+    </ConfigProvider>
   </StrictMode>,
-)
+  document.getElementById("root"),
+);

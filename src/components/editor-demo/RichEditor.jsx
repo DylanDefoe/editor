@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Editor, Toolbar } from "@wangeditor/editor-for-react";
+import { FUNCTION_TAG_START_ELEMENT_TYPE } from "../../config/editorConfig";
+import { getSelectedFunctionTagStartEntry } from "../../utils/functionTagNodeUtils";
 
 function RichEditor({
   // 编辑器 HTML 内容
@@ -10,6 +12,8 @@ function RichEditor({
   onMount,
   // beforeinput 事件回调
   onBeforeInput,
+  // 点击函数开始标签回调
+  onFunctionTagStartClick,
 }) {
   const [editor, setEditor] = useState(null);
 
@@ -76,12 +80,44 @@ function RichEditor({
     const handleBeforeInput = (event) => {
       onBeforeInput?.(event);
     };
+
+    const handleClick = (event) => {
+      if (!onFunctionTagStartClick) {
+        return;
+      }
+
+      const target = event.target;
+      const startTagElement = target?.closest?.(
+        `span[data-w-e-type="${FUNCTION_TAG_START_ELEMENT_TYPE}"]`,
+      );
+
+      if (!startTagElement) {
+        return;
+      }
+
+      const condition = startTagElement.getAttribute("data-condition") || "";
+
+      if (!condition.trim()) {
+        return;
+      }
+
+      const entry = getSelectedFunctionTagStartEntry(editor);
+      const path = entry ? entry[1] : null;
+
+      onFunctionTagStartClick({
+        condition,
+        path,
+      });
+    };
+
     editableContainer.addEventListener("beforeinput", handleBeforeInput);
+    editableContainer.addEventListener("click", handleClick);
 
     return () => {
       editableContainer.removeEventListener("beforeinput", handleBeforeInput);
+      editableContainer.removeEventListener("click", handleClick);
     };
-  }, [editor, onBeforeInput]);
+  }, [editor, onBeforeInput, onFunctionTagStartClick]);
 
   return (
     <div className="editor-shell">

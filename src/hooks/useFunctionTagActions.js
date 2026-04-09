@@ -4,6 +4,14 @@ import {
   createFunctionTagStartNode,
 } from "../utils/functionTagNodeUtils";
 
+const insertTextAfterInlineVoid = (editor, text) => {
+  editor.move(1);
+
+  if (text) {
+    editor.insertText(text);
+  }
+};
+
 function useFunctionTagActions({
   editor,
 } = {}) {
@@ -29,9 +37,11 @@ function useFunctionTagActions({
 
       const functionTagStartNode = createFunctionTagStartNode(condition);
       const functionTagEndNode = createFunctionTagEndNode();
+      const normalizedBodyText = typeof bodyText === "string" ? bodyText : "";
 
       currentEditor.insertNode(functionTagStartNode);
-      currentEditor.insertText(typeof bodyText === "string" ? bodyText : "");
+      insertTextAfterInlineVoid(currentEditor, normalizedBodyText);
+
       currentEditor.insertNode(functionTagEndNode);
       currentEditor.move(1);
     },

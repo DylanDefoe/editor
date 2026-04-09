@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import VariablePresetPanel from "./VariablePresetPanel";
 import {
   VARIABLE_PRESETS,
@@ -12,8 +12,23 @@ import useFunctionTagActions from "../../hooks/useFunctionTagActions";
 import VariableMention from "./VariableMention";
 import useFocusEditor from "../../hooks/useFocusEditor";
 import useEditorItems from "../../hooks/useEditorItems";
+import IfFunctionModal from "./IfFunctionModal";
+import {
+  patchFunctionTagStartConditionAtPath,
+  patchSelectedFunctionTagStartCondition,
+} from "../../utils/functionTagNodeUtils";
+
+const IF_MODAL_MODE = {
+  create: "create",
+  edit: "edit",
+};
 
 function EditorDemo() {
+  const [ifModalOpen, setIfModalOpen] = useState(false);
+  const [ifModalMode, setIfModalMode] = useState(IF_MODAL_MODE.create);
+  const [ifModalInitialCondition, setIfModalInitialCondition] = useState("");
+  const [editingStartNodePath, setEditingStartNodePath] = useState(null);
+
   const { editorItems, updateEditorHtml, copyEditor } = useEditorItems({
     initialHtml: EDITOR_DEFAULT_VALUE,
   });
@@ -48,14 +63,66 @@ function EditorDemo() {
   const handleVariableClick = useCallback(
     (preset) => {
       if (preset?.type === FUNCTION_TAG_PRESET_TYPE) {
-        insertFunctionTag(preset.condition, preset.bodyText, false);
+        setIfModalMode(IF_MODAL_MODE.create);
+        setIfModalInitialCondition("");
+        setEditingStartNodePath(null);
+        setIfModalOpen(true);
         return;
       }
 
-      insertVariable(preset?.key, false);
+      if (!preset?.key) {
+        return;
+      }
+
+      insertVariable(preset.key, false);
     },
-    [insertFunctionTag, insertVariable],
+    [insertVariable],
   );
+
+  const handleIfModalSave = useCallback(
+    ({ condition }) => {
+      if (ifModalMode === IF_MODAL_MODE.edit) {
+        const updated = patchSelectedFunctionTagStartCondition(
+          activeEditor,
+          condition,
+        );
+
+        if (!updated) {
+          patchFunctionTagStartConditionAtPath(
+            activeEditor,
+            editingStartNodePath,
+            condition,
+          );
+        }
+      } else {
+        insertFunctionTag(condition, "需要展示的文案", false);
+      }
+
+      setIfModalOpen(false);
+      setIfModalMode(IF_MODAL_MODE.create);
+      setIfModalInitialCondition("");
+      setEditingStartNodePath(null);
+    },
+    [activeEditor, editingStartNodePath, ifModalMode, insertFunctionTag],
+  );
+
+  const handleIfModalCancel = useCallback(() => {
+    setIfModalOpen(false);
+    setIfModalMode(IF_MODAL_MODE.create);
+    setIfModalInitialCondition("");
+    setEditingStartNodePath(null);
+  }, []);
+
+  const handleFunctionTagStartClick = useCallback(({ condition, path }) => {
+    if (!condition) {
+      return;
+    }
+
+    setIfModalMode(IF_MODAL_MODE.edit);
+    setIfModalInitialCondition(condition);
+    setEditingStartNodePath(path);
+    setIfModalOpen(true);
+  }, []);
 
   const handleEditorChange = useCallback(
     (id) =>
@@ -76,11 +143,37 @@ function EditorDemo() {
     [editorItems],
   );
 
+  const editorChangeHandlers = useMemo(() => {
+    const handlers = {};
+
+    editorCards.forEach((item) => {
+      handlers[item.id] = handleEditorChange(item.id);
+    });
+
+    return handlers;
+  }, [editorCards, handleEditorChange]);
+
+  const editorCopyHandlers = useMemo(() => {
+    const handlers = {};
+
+    editorCards.forEach((item) => {
+      handlers[item.id] = () => {
+        copyEditor(item.id);
+      };
+    });
+
+    return handlers;
+  }, [copyEditor, editorCards]);
+
   const mentionVariables = useMemo(
     () =>
       VARIABLE_PRESETS.filter(
         (preset) => preset?.type !== FUNCTION_TAG_PRESET_TYPE,
-      ),
+      ).map(item => ({
+        label: item.label,
+        value: item.key,
+        key: item.key,
+      })),
     [],
   );
 
@@ -101,6 +194,13 @@ function EditorDemo() {
           onSelect={handleVariableSelect}
           onClose={closeMention}
         />
+        <IfFunctionModal
+          open={ifModalOpen}
+          variables={mentionVariables}
+          initialCondition={ifModalInitialCondition}
+          onCancel={handleIfModalCancel}
+          onSave={handleIfModalSave}
+        />
         <div className="editor-cards-stack">
           {editorCards.map((item) => {
             return (
@@ -112,12 +212,11 @@ function EditorDemo() {
                 <EditorCard
                   index={item.index}
                   value={item.html}
-                  onChange={handleEditorChange(item.id)}
+                  onChange={editorChangeHandlers[item.id]}
                   onEditorMount={registerEditor}
                   onBeforeInput={handleEditorBeforeInput}
-                  onCopy={() => {
-                    copyEditor(item.id);
-                  }}
+                  onFunctionTagStartClick={handleFunctionTagStartClick}
+                  onCopy={editorCopyHandlers[item.id]}
                 />
               </div>
             );
