@@ -16,9 +16,13 @@ function VariablePresetPanel({
               <button
                 type="button"
                 className="variable-tag"
-                title={`插入 {{${variable.key}}}`}
+                title={
+                  variable.type
+                    ? `插入 ${variable.label}`
+                    : `插入 {{${variable.key}}}`
+                }
                 onClick={() => {
-                  onVariableClick?.(variable.key);
+                  onVariableClick?.(variable);
                 }}
               >
                 {variable.label}

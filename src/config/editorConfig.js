@@ -5,6 +5,9 @@ export const VARIABLE_TOKEN_CONFIG = {
 
 // 变量节点类型定义
 export const VARIABLE_ELEMENT_TYPE = "variable";
+export const FUNCTION_TAG_START_ELEMENT_TYPE = "function-tag-start";
+export const FUNCTION_TAG_END_ELEMENT_TYPE = "function-tag-end";
+export const FUNCTION_TAG_PRESET_TYPE = "functionTag";
 
 export const VARIABLE_MENTION_CONFIG = {
   triggerChar: "@",
@@ -26,5 +29,12 @@ export const VARIABLE_PRESETS = [
   {
     key: "gender",
     label: "性别",
+  },
+  {
+    type: FUNCTION_TAG_PRESET_TYPE,
+    key: "ifCustomerNameA",
+    label: "函数标签",
+    condition: "customername == 'A'",
+    bodyText: "需要展示的文案",
   },
 ];
