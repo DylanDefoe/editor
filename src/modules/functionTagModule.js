@@ -19,19 +19,6 @@ const normalizeCondition = (condition) => {
   return typeof condition === "string" ? condition.trim() : "";
 };
 
-const escapeHtmlText = (value) => {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-};
-
-const escapeHtmlAttribute = (value) => {
-  return escapeHtmlText(value)
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-};
-
 const createFunctionTagStartText = (condition) => `{{? ${condition} }}`;
 const createFunctionTagEndText = () => FUNCTION_TAG_TEXT.end;
 
@@ -96,10 +83,7 @@ export function registerFunctionTagElements() {
         return "";
       }
 
-      const escapedCondition = escapeHtmlAttribute(condition);
-      const displayText = escapeHtmlText(createFunctionTagStartText(condition));
-
-      return `<span data-w-e-type="${FUNCTION_TAG_START_ELEMENT_TYPE}" data-condition="${escapedCondition}" contenteditable="false">${displayText}</span>`;
+      return `<span data-w-e-type="${FUNCTION_TAG_START_ELEMENT_TYPE}" data-condition="${condition}" contenteditable="false">${createFunctionTagStartText(condition)}</span>`;
     },
   });
 
