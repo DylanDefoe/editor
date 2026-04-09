@@ -60,6 +60,9 @@ export const readStyleValue = (editor, styleKey, fallback = EMPTY_VALUE) => {
   return node[styleKey] ?? fallback;
 };
 
+/**
+ * 判断当前是否选中变量节点，供菜单禁用态复用。
+ */
 export const isVariableSelectionDisabled = (editor) => !getSelectedVariableEntry(editor);
 
 /**

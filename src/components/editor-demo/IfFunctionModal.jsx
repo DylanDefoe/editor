@@ -49,6 +49,9 @@ const parseConditionToFields = (condition) => {
   };
 };
 
+/**
+ * IF 条件弹窗：收集并回填 left/operator/right，输出规范化 condition。
+ */
 function IfFunctionModal({
   open,
   variables,

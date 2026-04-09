@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { Editor, Toolbar } from "@wangeditor/editor-for-react";
-import { FUNCTION_TAG_START_ELEMENT_TYPE } from "../../config/editorConfig";
-import { getSelectedFunctionTagStartEntry } from "../../utils/functionTagNodeUtils";
+import useRichEditorDomEvents from "../../hooks/useRichEditorDomEvents";
 
+/**
+ * 富文本编辑器壳组件：负责初始化编辑器、挂载工具栏并接入 DOM 事件 hook。
+ */
 function RichEditor({
   // 编辑器 HTML 内容
   value,
@@ -16,6 +18,12 @@ function RichEditor({
   onFunctionTagStartClick,
 }) {
   const [editor, setEditor] = useState(null);
+
+  useRichEditorDomEvents({
+    editor,
+    onBeforeInput,
+    onFunctionTagStartClick,
+  });
 
   // 通过 memo 保持配置引用稳定，避免不必要重渲染。
   const editorConfig = useMemo(
@@ -66,58 +74,6 @@ function RichEditor({
       }
     };
   }, [editor]);
-
-  useEffect(() => {
-    if (!editor) {
-      return undefined;
-    }
-
-    const editableContainer = editor.getEditableContainer();
-    if (!editableContainer) {
-      return undefined;
-    }
-
-    const handleBeforeInput = (event) => {
-      onBeforeInput?.(event);
-    };
-
-    const handleClick = (event) => {
-      if (!onFunctionTagStartClick) {
-        return;
-      }
-
-      const target = event.target;
-      const startTagElement = target?.closest?.(
-        `span[data-w-e-type="${FUNCTION_TAG_START_ELEMENT_TYPE}"]`,
-      );
-
-      if (!startTagElement) {
-        return;
-      }
-
-      const condition = startTagElement.getAttribute("data-condition") || "";
-
-      if (!condition.trim()) {
-        return;
-      }
-
-      const entry = getSelectedFunctionTagStartEntry(editor);
-      const path = entry ? entry[1] : null;
-
-      onFunctionTagStartClick({
-        condition,
-        path,
-      });
-    };
-
-    editableContainer.addEventListener("beforeinput", handleBeforeInput);
-    editableContainer.addEventListener("click", handleClick);
-
-    return () => {
-      editableContainer.removeEventListener("beforeinput", handleBeforeInput);
-      editableContainer.removeEventListener("click", handleClick);
-    };
-  }, [editor, onBeforeInput, onFunctionTagStartClick]);
 
   return (
     <div className="editor-shell">

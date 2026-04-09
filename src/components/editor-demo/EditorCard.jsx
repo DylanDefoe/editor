@@ -1,6 +1,9 @@
 import PreviewCard from "./PreviewCard";
 import RichEditor from "./RichEditor";
 
+/**
+ * 单个编辑器卡片：包含编辑器主体与实时 HTML 预览。
+ */
 export default function EditorCard({
   // 编辑器序号
   index,

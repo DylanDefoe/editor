@@ -4,6 +4,9 @@ import {
   createFunctionTagStartNode,
 } from "../utils/functionTagNodeUtils";
 
+/**
+ * 在 inline-void 节点后移动光标并插入正文文本。
+ */
 const insertTextAfterInlineVoid = (editor, text) => {
   editor.move(1);
 
@@ -53,4 +56,7 @@ function useFunctionTagActions({
   };
 }
 
+/**
+ * 提供 IF 函数标签的插入动作。
+ */
 export default useFunctionTagActions;

@@ -70,6 +70,9 @@ const createFunctionTagVNode = (elemNode, children, editor) => {
   };
 };
 
+/**
+ * 注册函数标签 start/end 元素的渲染、序列化和编辑器行为。
+ */
 export function registerFunctionTagElements() {
   Boot.registerRenderElem({
     type: FUNCTION_TAG_START_ELEMENT_TYPE,

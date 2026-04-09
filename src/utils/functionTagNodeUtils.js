@@ -56,6 +56,9 @@ export const isFunctionTagEndNode = (node) => {
   return Boolean(node && node.type === FUNCTION_TAG_END_ELEMENT_TYPE);
 };
 
+/**
+ * 归一化 condition 字符串，避免写入脏值。
+ */
 const normalizeCondition = (condition) => {
   return typeof condition === "string" ? condition.trim() : "";
 };
