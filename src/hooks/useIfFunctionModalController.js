@@ -19,15 +19,20 @@ function useIfFunctionModalController({ activeEditor, insertFunctionTag }) {
   const [mode, setMode] = useState(IF_MODAL_MODE.create);
   const [initialCondition, setInitialCondition] = useState("");
   const [editingStartNodePath, setEditingStartNodePath] = useState(null);
+  const [deleteMentionOnCreate, setDeleteMentionOnCreate] = useState(false);
 
   const resetModalState = useCallback(() => {
     setMode(IF_MODAL_MODE.create);
     setInitialCondition("");
     setEditingStartNodePath(null);
+    setDeleteMentionOnCreate(false);
   }, []);
 
-  const openForCreate = useCallback(() => {
+  const openForCreate = useCallback((options = {}) => {
+    const { deleteMention = false } = options;
+
     resetModalState();
+    setDeleteMentionOnCreate(Boolean(deleteMention));
     setOpen(true);
   }, [resetModalState]);
 
@@ -66,12 +71,23 @@ function useIfFunctionModalController({ activeEditor, insertFunctionTag }) {
           );
         }
       } else {
-        insertFunctionTag(condition, DEFAULT_IF_BODY_TEXT, false);
+        insertFunctionTag(
+          condition,
+          DEFAULT_IF_BODY_TEXT,
+          deleteMentionOnCreate,
+        );
       }
 
       closeAndReset();
     },
-    [activeEditor, closeAndReset, editingStartNodePath, insertFunctionTag, mode],
+    [
+      activeEditor,
+      closeAndReset,
+      deleteMentionOnCreate,
+      editingStartNodePath,
+      insertFunctionTag,
+      mode,
+    ],
   );
 
   return {

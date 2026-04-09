@@ -34,7 +34,7 @@ export const VARIABLE_PRESETS = [
   },
   {
     type: FUNCTION_TAG_PRESET_TYPE,
-    key: "ifCustomerNameA",
+    key: "if  function",
     label: "IF函数",
     bodyText: "需要展示的文案",
   },

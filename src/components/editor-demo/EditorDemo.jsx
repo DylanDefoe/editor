@@ -59,11 +59,22 @@ function EditorDemo() {
   });
 
   const handleVariableSelect = useCallback(
-    (variableKey) => {
+    (preset) => {
+      if (isFunctionTagPreset(preset)) {
+        openForCreate({ deleteMention: true });
+        closeMention();
+        return;
+      }
+
+      const variableKey = preset?.key;
+      if (!variableKey) {
+        return;
+      }
+
       insertVariable(variableKey, true);
       closeMention();
     },
-    [closeMention, insertVariable],
+    [closeMention, insertVariable, openForCreate],
   );
 
   const handleVariableClick = useCallback(
@@ -98,8 +109,12 @@ function EditorDemo() {
   });
 
   const mentionVariables = useMemo(
-    () =>
-      getMentionVariables(VARIABLE_PRESETS),
+    () => VARIABLE_PRESETS,
+    [],
+  );
+
+  const modalVariables = useMemo(
+    () => getMentionVariables(VARIABLE_PRESETS),
     [],
   );
 
@@ -122,7 +137,7 @@ function EditorDemo() {
         />
         <IfFunctionModal
           open={ifModalOpen}
-          variables={mentionVariables}
+          variables={modalVariables}
           initialCondition={ifModalInitialCondition}
           onCancel={handleIfModalCancel}
           onSave={handleIfModalSave}

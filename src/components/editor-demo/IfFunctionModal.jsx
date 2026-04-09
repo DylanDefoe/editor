@@ -87,7 +87,7 @@ function IfFunctionModal({
           label="左值"
           rules={[{ validator: validateMentionField }]}
         >
-          <Mentions options={mentionOptions} placeholder="请输入左操作数" />
+          <Mentions filterOption={(input, option) => option.label.includes(input)} options={mentionOptions} placeholder="请输入左操作数" />
         </Form.Item>
 
         <Form.Item
@@ -109,7 +109,7 @@ function IfFunctionModal({
           label="右值"
           rules={[{ validator: validateMentionField }]}
         >
-          <Mentions options={mentionOptions} placeholder="请输入右操作数" />
+          <Mentions filterOption={(input, option) => option.label.includes(input)} options={mentionOptions} placeholder="请输入右操作数" />
         </Form.Item>
       </Form>
     </Modal>

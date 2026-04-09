@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { VARIABLE_MENTION_CONFIG } from "../../config/editorConfig";
+import { isFunctionTagPreset } from "../../utils/variablePresetUtils";
 
 /**
  * 根据关键字过滤 mention 选项。
@@ -103,8 +104,8 @@ function VariableMention({
       if (!isNavigableOptionIndex(safeActiveIndex, optionsCount)) {
         return;
       }
-      onSelect(options[safeActiveIndex].key);
-      return;
+       onSelect(options[safeActiveIndex]);
+       return;
     }
 
     if (event.key === "Escape") {
@@ -155,11 +156,15 @@ function VariableMention({
                   event.preventDefault();
                 }}
                 onClick={() => {
-                  onSelect(option.key);
+                  onSelect(option);
                 }}
               >
                 <span>{option.label}</span>
-                <span className="mention-item-key">{`{{${option.key}}}`}</span>
+                <span className="mention-item-key">
+                  {isFunctionTagPreset(option)
+                    ? `配置 ${option.label}`
+                    : `{{${option.key}}}`}
+                </span>
               </div>
             );
           })
