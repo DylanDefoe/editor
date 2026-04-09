@@ -3,10 +3,12 @@ import VariablePresetPanel from "./VariablePresetPanel";
 import {
   VARIABLE_PRESETS,
   EDITOR_DEFAULT_VALUE,
+  FUNCTION_TAG_PRESET_TYPE,
 } from "../../config/editorConfig";
 import EditorCard from "./EditorCard";
 import useVariableMention from "../../hooks/useVariableMention";
 import useVariableActions from "../../hooks/useVariableActions";
+import useFunctionTagActions from "../../hooks/useFunctionTagActions";
 import VariableMention from "./VariableMention";
 import useFocusEditor from "../../hooks/useFocusEditor";
 import useEditorItems from "../../hooks/useEditorItems";
@@ -19,6 +21,10 @@ function EditorDemo() {
   const { activeEditor, registerEditor, syncActiveEditor } = useFocusEditor();
 
   const { insertVariable } = useVariableActions({
+    editor: activeEditor,
+  });
+
+  const { insertFunctionTag } = useFunctionTagActions({
     editor: activeEditor,
   });
 
@@ -40,10 +46,15 @@ function EditorDemo() {
   );
 
   const handleVariableClick = useCallback(
-    (variableKey) => {
-      insertVariable(variableKey, false);
+    (preset) => {
+      if (preset?.type === FUNCTION_TAG_PRESET_TYPE) {
+        insertFunctionTag(preset.condition, preset.bodyText, false);
+        return;
+      }
+
+      insertVariable(preset?.key, false);
     },
-    [insertVariable],
+    [insertFunctionTag, insertVariable],
   );
 
   const handleEditorChange = useCallback(
@@ -65,6 +76,14 @@ function EditorDemo() {
     [editorItems],
   );
 
+  const mentionVariables = useMemo(
+    () =>
+      VARIABLE_PRESETS.filter(
+        (preset) => preset?.type !== FUNCTION_TAG_PRESET_TYPE,
+      ),
+    [],
+  );
+
   return (
     <div className="editor-demo-layout">
       <div className="bg-glow bg-glow-left" />
@@ -77,7 +96,7 @@ function EditorDemo() {
         <VariableMention
           key={activeEditor?.id ?? "mention"}
           open={mentionOpen}
-          variables={VARIABLE_PRESETS}
+          variables={mentionVariables}
           position={mentionPosition}
           onSelect={handleVariableSelect}
           onClose={closeMention}
