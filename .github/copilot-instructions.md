@@ -13,7 +13,6 @@ Testing:
 ## High-level architecture
 - This is a Vite + React (JavaScript, ESM) single-page app.
 - Entry point is `src/main.jsx`, which mounts `App` and globally imports:
-  - `antd` v4 styles (`antd/dist/antd.css`)
   - wangEditor styles (`@wangeditor/editor/dist/css/style.css`)
 - `src/App.jsx` is a thin shell that renders `EditorDemo`.
 - The main feature lives under `src/components/editor-demo/`:

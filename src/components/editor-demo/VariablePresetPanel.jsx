@@ -1,5 +1,3 @@
-import { Card, Space, Tag } from "antd";
-
 function VariablePresetPanel({
   // 变量列表
   variables,
@@ -7,25 +5,29 @@ function VariablePresetPanel({
   onVariableClick,
 }) {
   return (
-    <Card title="变量预设" className="editor-demo-card variable-panel">
-      <Space size={12} style={{ width: "100%" }}>
+    <section className="editor-demo-card panel-card variable-panel">
+      <header className="panel-card-header">
+        <h2 className="panel-card-title">变量预设</h2>
+      </header>
+      <div className="variable-list">
         {variables.map((variable) => {
           return (
             <div className="variable-item" key={variable.key}>
-              <Tag
-                color="blue"
+              <button
+                type="button"
                 className="variable-tag"
+                title={`插入 {{${variable.key}}}`}
                 onClick={() => {
                   onVariableClick?.(variable.key);
                 }}
               >
                 {variable.label}
-              </Tag>
+              </button>
             </div>
           );
         })}
-      </Space>
-    </Card>
+      </div>
+    </section>
   );
 }
 

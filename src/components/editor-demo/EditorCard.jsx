@@ -1,4 +1,3 @@
-import { Button, Card, Space } from "antd";
 import PreviewCard from "./PreviewCard";
 import RichEditor from "./RichEditor";
 
@@ -17,16 +16,15 @@ export default function EditorCard({
   onCopy,
 }) {
   return (
-    <Card
-      title={`编辑器 ${index + 1}`}
-      extra={
-        <Button type="primary" onClick={onCopy}>
+    <section className="editor-demo-card panel-card editor-instance-card">
+      <header className="panel-card-header">
+        <h2 className="panel-card-title">编辑器 {index + 1}</h2>
+        <button type="button" className="btn-primary" onClick={onCopy}>
           复制
-        </Button>
-      }
-      className="editor-demo-card"
-    >
-      <Space direction="vertical" size={12} style={{ width: "100%" }}>
+        </button>
+      </header>
+
+      <div className="editor-card-body">
         <RichEditor
           value={value}
           onChange={onChange}
@@ -35,7 +33,7 @@ export default function EditorCard({
         />
 
         <PreviewCard html={value} />
-      </Space>
-    </Card>
+      </div>
+    </section>
   );
 }

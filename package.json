@@ -12,7 +12,6 @@
   "dependencies": {
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-react": "^1.0.6",
-    "antd": "^4.24.16",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "snabbdom": "^3.6.3"

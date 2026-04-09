@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Input } from "antd";
 import { VARIABLE_MENTION_CONFIG } from "../../config/editorConfig";
 
 function VariableMention({
@@ -107,10 +106,13 @@ function VariableMention({
         left: position?.left ?? 0,
       }}
     >
-      <Input
+      <input
         ref={inputRef}
+        className="mention-input"
         value={searchValue}
         placeholder={VARIABLE_MENTION_CONFIG.searchPlaceholder}
+        autoComplete="off"
+        spellCheck={false}
         onChange={(event) => {
           setSearchValue(event.target.value);
           setActiveIndex(0);
