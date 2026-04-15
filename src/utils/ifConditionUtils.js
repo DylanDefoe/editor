@@ -4,9 +4,7 @@ export const CONDITION_OPERATORS = [">=", "<=", "==", "!=", ">", "<"];
  * 规范化条件左右值，移除空白和开头 mention 前缀。
  */
 export const normalizeOperand = (value) => {
-  return String(value || "")
-    .trim()
-    .replace(/^@+/, "");
+  return (value || "").trim().replace(/^@+/, "");
 };
 
 /**

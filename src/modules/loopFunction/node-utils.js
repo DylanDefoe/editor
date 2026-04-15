@@ -77,6 +77,9 @@ export const getSelectedLoopFunctionEntry = (editor) => {
   return entry || null;
 };
 
+/**
+ * 尝试按 path 获取节点，失败时返回 null。
+ */
 const tryGetNodeAtPath = (editor, path) => {
   try {
     return SlateNode.get(editor, path);
@@ -85,6 +88,9 @@ const tryGetNodeAtPath = (editor, path) => {
   }
 };
 
+/**
+ * 按 path 更新 LOOP 节点变量名。
+ */
 const patchNodeVariableAtPath = (editor, path, variableName) => {
   const node = tryGetNodeAtPath(editor, path);
   if (!isLoopFunctionNode(node)) {
