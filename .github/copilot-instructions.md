@@ -23,6 +23,7 @@
   - `variable/` is split by responsibility (`render-elem`, `elem-to-html`, `parse-elem-html`, `plugin`, `menu/*`) and handles variable inline-void nodes (`{{key}}`) plus variable style menus.
   - `ifFunction/` is split by responsibility (`render-elem`, `elem-to-html`, `parse-elem-html`, `plugin`) and handles IF start/end inline-void nodes (`{{? condition }}` / `{{/}}`).
   - `joinFunction/` is split by responsibility (`render-elem`, `elem-to-html`, `parse-elem-html`, `plugin`) and handles JOIN inline-void nodes (`{{? join(var,'sep')}}`).
+  - Variable style menus also apply to `joinFunction` nodes (same toolbar keys and style fields).
 - `RichEditor.jsx` is the wangEditor React wrapper with dual toolbars (default + variable style toolbar) and lifecycle cleanup.
 
 ## Key repository conventions

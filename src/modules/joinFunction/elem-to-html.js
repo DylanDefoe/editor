@@ -1,4 +1,9 @@
 import { JOIN_FUNCTION_ELEMENT_TYPE } from "../../config/editorConfig";
+import {
+  buildVariableStyleObject,
+  styleObjectToCssText,
+  VARIABLE_BASE_STYLE,
+} from "../variable/shared-style";
 
 /**
  * 生成 JOIN 函数显示文本。
@@ -20,9 +25,13 @@ const elemToHtmlConf = {
       return "";
     }
 
-    return `<span data-w-e-type="${JOIN_FUNCTION_ELEMENT_TYPE}" data-variable-name="${variableName}" data-separator="${separator}" contenteditable="false">${createJoinDisplayText(variableName, separator)}</span>`;
+    const cssText = styleObjectToCssText({
+      ...VARIABLE_BASE_STYLE,
+      ...buildVariableStyleObject(elemNode),
+    });
+
+    return `<span data-w-e-type="${JOIN_FUNCTION_ELEMENT_TYPE}" data-variable-name="${variableName}" data-separator="${separator}" contenteditable="false" style="${cssText}">${createJoinDisplayText(variableName, separator)}</span>`;
   },
 };
 
 export default elemToHtmlConf;
-

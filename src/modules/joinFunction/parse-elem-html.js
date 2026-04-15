@@ -1,4 +1,8 @@
 import { JOIN_FUNCTION_ELEMENT_TYPE } from "../../config/editorConfig";
+import {
+  mergeVariableStyles,
+  parseVariableStyleFromDom,
+} from "../variable/shared-style";
 
 /**
  * joinFunction HTML 解析配置。
@@ -13,14 +17,16 @@ const parseElemHtmlConf = {
       return null;
     }
 
+    const stylePatch = parseVariableStyleFromDom(domElem);
+
     return {
       type: JOIN_FUNCTION_ELEMENT_TYPE,
       variableName,
       separator,
+      ...mergeVariableStyles({}, stylePatch),
       children: [{ text: "" }],
     };
   },
 };
 
 export default parseElemHtmlConf;
-

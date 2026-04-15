@@ -1,6 +1,9 @@
 import { DomEditor } from "@wangeditor/editor";
 import { JOIN_FUNCTION_ELEMENT_TYPE } from "../../config/editorConfig";
-import { VARIABLE_BASE_STYLE } from "../variable/shared-style";
+import {
+  buildVariableStyleObject,
+  VARIABLE_BASE_STYLE,
+} from "../variable/shared-style";
 
 const SELECTED_BORDER_STYLE = "2px solid #B4D5FF";
 const UNSELECTED_BORDER_STYLE = "2px solid transparent";
@@ -41,6 +44,7 @@ function renderJoinFunctionElem(elemNode, children, editor) {
       },
       style: {
         ...VARIABLE_BASE_STYLE,
+        ...buildVariableStyleObject(elemNode),
         border: selected ? SELECTED_BORDER_STYLE : UNSELECTED_BORDER_STYLE,
       },
     },
@@ -54,4 +58,3 @@ const renderElemConf = {
 };
 
 export default renderElemConf;
-

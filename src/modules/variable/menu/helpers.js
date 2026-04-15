@@ -1,18 +1,19 @@
 import { SlateEditor, SlateTransforms } from "@wangeditor/editor";
 import { isVariableNode } from "../node-utils";
+import { isJoinFunctionNode } from "../../joinFunction/node-utils";
 import { EMPTY_VALUE } from "./constants";
 import { mergeVariableStyles } from "../shared-style";
 
 /**
- * 获取当前选中的 variable 节点与 path。
+ * 获取当前选中的可样式化节点（variable / joinFunction）与 path。
  */
-export const getSelectedVariableEntry = (editor) => {
+export const getSelectedStyleNodeEntry = (editor) => {
   if (!editor?.selection) {
     return null;
   }
 
   const entry = SlateEditor.above(editor, {
-    match: (node) => isVariableNode(node),
+    match: (node) => isVariableNode(node) || isJoinFunctionNode(node),
     at: editor.selection,
   });
 
@@ -20,10 +21,10 @@ export const getSelectedVariableEntry = (editor) => {
 };
 
 /**
- * 仅更新当前选中 variable 节点样式。
+ * 仅更新当前选中可样式化节点样式。
  */
 export const patchSelectedVariableStyle = (editor, patch) => {
-  const entry = getSelectedVariableEntry(editor);
+  const entry = getSelectedStyleNodeEntry(editor);
   if (!entry) {
     return;
   }
@@ -34,10 +35,10 @@ export const patchSelectedVariableStyle = (editor, patch) => {
 };
 
 /**
- * 读取当前选中 variable 节点样式值，未选中返回 fallback。
+ * 读取当前选中可样式化节点样式值，未选中返回 fallback。
  */
 export const readStyleValue = (editor, styleKey, fallback = EMPTY_VALUE) => {
-  const entry = getSelectedVariableEntry(editor);
+  const entry = getSelectedStyleNodeEntry(editor);
   if (!entry) {
     return fallback;
   }
@@ -47,9 +48,9 @@ export const readStyleValue = (editor, styleKey, fallback = EMPTY_VALUE) => {
 };
 
 /**
- * 当前是否未选中 variable 节点，用于菜单禁用态判断。
+ * 当前是否未选中可样式化节点，用于菜单禁用态判断。
  */
-export const isVariableSelectionDisabled = (editor) => !getSelectedVariableEntry(editor);
+export const isVariableSelectionDisabled = (editor) => !getSelectedStyleNodeEntry(editor);
 
 /**
  * 兼容内置 list：string 或 { name, value }。
