@@ -6,8 +6,8 @@ import { JOIN_FUNCTION_ELEMENT_TYPE } from "../../config/editorConfig";
  */
 const normalizeJoinArgs = ({ variableName, separator }) => {
   return {
-    variableName: String(variableName || "").trim(),
-    separator: String(separator || ""),
+    variableName: (variableName || "").trim(),
+    separator: separator || "",
   };
 };
 
@@ -31,7 +31,7 @@ export const createJoinFunctionNode = (variableName, separator) => {
  * 判断节点是否为 JOIN 函数节点。
  */
 export const isJoinFunctionNode = (node) => {
-  return Boolean(node && node.type === JOIN_FUNCTION_ELEMENT_TYPE);
+  return node && node.type === JOIN_FUNCTION_ELEMENT_TYPE;
 };
 
 /**
@@ -53,7 +53,11 @@ export const getSelectedJoinFunctionEntry = (editor) => {
 /**
  * 按 path 更新 JOIN 节点参数。
  */
-export const patchJoinFunctionAtPath = (editor, path, { variableName, separator }) => {
+export const patchJoinFunctionAtPath = (
+  editor,
+  path,
+  { variableName, separator },
+) => {
   const normalized = normalizeJoinArgs({ variableName, separator });
   if (!editor || !Array.isArray(path) || !normalized.variableName) {
     return false;
@@ -83,4 +87,3 @@ export const patchSelectedJoinFunction = (editor, args) => {
   const [, path] = entry;
   return patchJoinFunctionAtPath(editor, path, args);
 };
-

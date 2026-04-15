@@ -16,12 +16,7 @@ export const getSelectedVariableEntry = (editor) => {
     at: editor.selection,
   });
 
-  if (!entry) {
-    return null;
-  }
-
-  const [node, path] = entry;
-  return [node, path];
+  return entry || null;
 };
 
 /**
@@ -72,6 +67,9 @@ export const normalizeSelectOptions = (items = [], defaultLabel) => [
     .filter(Boolean),
 ];
 
+/**
+ * 读取内置菜单配置
+ */
 const getMenuConfig = (editor, key) => editor.getMenuConfig(key) || {};
 
 /**
