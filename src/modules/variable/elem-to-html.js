@@ -1,7 +1,4 @@
-import {
-  VARIABLE_ELEMENT_TYPE,
-  VARIABLE_TOKEN_CONFIG,
-} from "../../config/editorConfig";
+import { VARIABLE_ELEMENT_TYPE } from "../../config/editorConfig";
 import {
   buildVariableStyleObject,
   styleObjectToCssText,
@@ -9,10 +6,10 @@ import {
 } from "./shared-style";
 
 /**
- * 生成变量在 HTML 序列化中的展示文本（如 {{name}}）。
+ * 生成变量显示文本
  */
 const createVariableDisplayText = (key) => {
-  return `${VARIABLE_TOKEN_CONFIG.prefix}${key}${VARIABLE_TOKEN_CONFIG.suffix}`;
+  return `{{${key}}}`;
 };
 
 /**

@@ -1,8 +1,3 @@
-export const VARIABLE_TOKEN_CONFIG = {
-  prefix: "{{",
-  suffix: "}}",
-};
-
 // 变量节点类型定义
 export const VARIABLE_ELEMENT_TYPE = "variable";
 export const IF_FUNCTION_START_ELEMENT_TYPE = "if-function-start";
