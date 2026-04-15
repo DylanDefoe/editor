@@ -6,7 +6,7 @@ import { registerLoopFunctionModule } from "./loopFunction";
 // 注册变量模块
 registerVariableModule();
 
-// 注册函数标签元素
+// 注册 IF 函数元素
 registerIfFunctionModule();
 
 // 注册 JOIN 函数元素
