@@ -7,7 +7,9 @@ export const VARIABLE_TOKEN_CONFIG = {
 export const VARIABLE_ELEMENT_TYPE = "variable";
 export const IF_FUNCTION_START_ELEMENT_TYPE = "if-function-start";
 export const IF_FUNCTION_END_ELEMENT_TYPE = "if-function-end";
+export const JOIN_FUNCTION_ELEMENT_TYPE = "join-function";
 export const IF_FUNCTION_PRESET_TYPE = "if-function";
+export const JOIN_FUNCTION_PRESET_TYPE = "join-function";
 
 export const VARIABLE_MENTION_CONFIG = {
   triggerChar: "@",
@@ -37,5 +39,10 @@ export const VARIABLE_PRESETS = [
     key: "if  function",
     label: "IF函数",
     bodyText: "需要展示的文案",
+  },
+  {
+    type: JOIN_FUNCTION_PRESET_TYPE,
+    key: "join function",
+    label: "JOIN函数",
   },
 ];

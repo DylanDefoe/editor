@@ -1,10 +1,27 @@
-import { IF_FUNCTION_PRESET_TYPE } from "../config/editorConfig";
+import {
+  IF_FUNCTION_PRESET_TYPE,
+  JOIN_FUNCTION_PRESET_TYPE,
+} from "../config/editorConfig";
 
 /**
  * 判断预设是否为 IF 函数预设。
  */
 export const isIfFunctionPreset = (preset) => {
   return preset?.type === IF_FUNCTION_PRESET_TYPE;
+};
+
+/**
+ * 判断预设是否为 JOIN 函数预设。
+ */
+export const isJoinFunctionPreset = (preset) => {
+  return preset?.type === JOIN_FUNCTION_PRESET_TYPE;
+};
+
+/**
+ * 判断预设是否为函数预设（IF/JOIN）。
+ */
+export const isFunctionPreset = (preset) => {
+  return isIfFunctionPreset(preset) || isJoinFunctionPreset(preset);
 };
 
 /**
@@ -27,7 +44,7 @@ export const toMentionVariable = (preset) => {
  */
 export const getMentionVariables = (presets = []) => {
   return presets
-    .filter((preset) => !isIfFunctionPreset(preset))
+    .filter((preset) => !isFunctionPreset(preset))
     .map(toMentionVariable)
     .filter(Boolean);
 };

@@ -8,14 +8,18 @@ import EditorCard from "./EditorCard";
 import useVariableMention from "../../hooks/useVariableMention";
 import useVariableActions from "../../hooks/useVariableActions";
 import useIfFunctionActions from "../../hooks/useIfFunctionActions";
+import useJoinFunctionActions from "../../hooks/useJoinFunctionActions";
 import VariableMention from "./VariableMention";
 import useFocusEditor from "../../hooks/useFocusEditor";
 import useEditorItems from "../../hooks/useEditorItems";
 import IfFunctionModal from "./IfFunctionModal";
 import useIfFunctionModalController from "../../hooks/useIfFunctionModalController";
+import JoinFunctionModal from "./JoinFunctionModal";
+import useJoinFunctionModalController from "../../hooks/useJoinFunctionModalController";
 import useEditorCardHandlers from "../../hooks/useEditorCardHandlers";
 import {
   getMentionVariables,
+  isJoinFunctionPreset,
   isIfFunctionPreset,
 } from "../../utils/variablePresetUtils";
 
@@ -37,6 +41,10 @@ function EditorDemo() {
     editor: activeEditor,
   });
 
+  const { insertJoinFunction } = useJoinFunctionActions({
+    editor: activeEditor,
+  });
+
   const {
     open: ifModalOpen,
     initialCondition: ifModalInitialCondition,
@@ -47,6 +55,18 @@ function EditorDemo() {
   } = useIfFunctionModalController({
     activeEditor,
     insertIfFunction,
+  });
+
+  const {
+    open: joinModalOpen,
+    initialValues: joinModalInitialValues,
+    openForCreate: openJoinModalForCreate,
+    openForEdit: openJoinModalForEdit,
+    closeAndReset: handleJoinModalCancel,
+    saveValues: handleJoinModalSave,
+  } = useJoinFunctionModalController({
+    activeEditor,
+    insertJoinFunction,
   });
 
   const {
@@ -65,6 +85,11 @@ function EditorDemo() {
         closeMention();
         return;
       }
+      if (isJoinFunctionPreset(preset)) {
+        openJoinModalForCreate({ deleteMention: true });
+        closeMention();
+        return;
+      }
 
       const variableKey = preset?.key;
       if (!variableKey) {
@@ -74,13 +99,17 @@ function EditorDemo() {
       insertVariable(variableKey, true);
       closeMention();
     },
-    [closeMention, insertVariable, openForCreate],
+    [closeMention, insertVariable, openForCreate, openJoinModalForCreate],
   );
 
   const handleVariableClick = useCallback(
     (preset) => {
       if (isIfFunctionPreset(preset)) {
         openForCreate();
+        return;
+      }
+      if (isJoinFunctionPreset(preset)) {
+        openJoinModalForCreate();
         return;
       }
 
@@ -90,12 +119,22 @@ function EditorDemo() {
 
       insertVariable(preset.key, false);
     },
-    [insertVariable, openForCreate],
+    [insertVariable, openForCreate, openJoinModalForCreate],
   );
 
   const handleIfFunctionStartClick = useCallback(({ condition, path }) => {
     openForEdit(condition, path);
   }, [openForEdit]);
+
+  const handleJoinFunctionClick = useCallback(({ variableName, separator, path }) => {
+    openJoinModalForEdit(
+      {
+        variableName,
+        separator,
+      },
+      path,
+    );
+  }, [openJoinModalForEdit]);
 
   const {
     editorCards,
@@ -142,6 +181,13 @@ function EditorDemo() {
           onCancel={handleIfModalCancel}
           onSave={handleIfModalSave}
         />
+        <JoinFunctionModal
+          open={joinModalOpen}
+          variables={modalVariables}
+          initialValues={joinModalInitialValues}
+          onCancel={handleJoinModalCancel}
+          onSave={handleJoinModalSave}
+        />
         <div className="editor-cards-stack">
           {editorCards.map((item) => {
             return (
@@ -157,6 +203,7 @@ function EditorDemo() {
                   onEditorMount={registerEditor}
                   onBeforeInput={handleEditorBeforeInput}
                   onIfFunctionStartClick={handleIfFunctionStartClick}
+                  onJoinFunctionClick={handleJoinFunctionClick}
                   onCopy={editorCopyHandlers[item.id]}
                 />
               </div>

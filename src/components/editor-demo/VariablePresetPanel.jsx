@@ -1,4 +1,4 @@
-import { IF_FUNCTION_PRESET_TYPE } from "../../config/editorConfig";
+import { isFunctionPreset } from "../../utils/variablePresetUtils";
 
 function VariablePresetPanel({
   // 变量列表
@@ -13,7 +13,7 @@ function VariablePresetPanel({
       </header>
       <div className="variable-list">
         {variables.map((variable) => {
-          const isIfFunctionPreset = variable.type === IF_FUNCTION_PRESET_TYPE;
+          const functionPreset = isFunctionPreset(variable);
 
           return (
             <div className="variable-item" key={variable.key}>
@@ -21,7 +21,7 @@ function VariablePresetPanel({
                 type="button"
                 className="variable-tag"
                 title={
-                  isIfFunctionPreset
+                  functionPreset
                     ? `配置 ${variable.label}`
                     : `插入 {{${variable.key}}}`
                 }

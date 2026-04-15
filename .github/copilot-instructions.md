@@ -15,13 +15,14 @@
 - `src/components/editor-demo/EditorDemo.jsx` is the composition root and orchestration layer. It wires:
   - editor list state (`useEditorItems`) and editor duplication flow,
   - active editor tracking (`useFocusEditor`),
-  - variable insertion and if-function insertion (`useVariableActions`, `useIfFunctionActions`),
+  - variable/if-function/join-function insertion (`useVariableActions`, `useIfFunctionActions`, `useJoinFunctionActions`),
   - mention trigger/position logic (`useVariableMention`),
-  - IF modal create/edit lifecycle (`useIfFunctionModalController`),
+  - IF/JOIN modal create-edit lifecycle (`useIfFunctionModalController`, `useJoinFunctionModalController`),
   - per-card handlers (`useEditorCardHandlers`).
 - Custom rich-text behavior is implemented as wangEditor extensions in `src/modules/`:
   - `variable/` is split by responsibility (`render-elem`, `elem-to-html`, `parse-elem-html`, `plugin`, `menu/*`) and handles variable inline-void nodes (`{{key}}`) plus variable style menus.
   - `ifFunction/` is split by responsibility (`render-elem`, `elem-to-html`, `parse-elem-html`, `plugin`) and handles IF start/end inline-void nodes (`{{? condition }}` / `{{/}}`).
+  - `joinFunction/` is split by responsibility (`render-elem`, `elem-to-html`, `parse-elem-html`, `plugin`) and handles JOIN inline-void nodes (`{{? join(var,'sep')}}`).
 - `RichEditor.jsx` is the wangEditor React wrapper with dual toolbars (default + variable style toolbar) and lifecycle cleanup.
 
 ## Key repository conventions
