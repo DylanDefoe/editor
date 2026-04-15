@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Form, Mentions, Modal } from "antd";
-import { normalizeOperand } from "../../utils/ifConditionUtils";
+
+/**
+ * 规范化变量值，移除空白和开头 mention 前缀。
+ */
+const normalizeOperand = (value) => {
+  return (value || "").trim().replace(/^@+/, "");
+};
 
 const normalizeMentionOption = (item) => {
   const value = item?.key ?? item?.value;
@@ -100,4 +106,3 @@ function LoopFunctionModal({
 }
 
 export default LoopFunctionModal;
-
