@@ -1,21 +1,21 @@
 import { Boot } from "@wangeditor/editor";
+import { createColorPanelElement } from "./color-panel";
 import {
   CLEAR_STYLE_ICON_SVG,
   COLOR_PANEL_DEFS,
   EMPTY_VALUE,
   SELECT_MENU_DEFS,
   TOGGLE_MENU_DEFS,
-} from "./variableStyleConstants";
-import { createColorPanelElement } from "./variableColorPanel";
+} from "./constants";
 import {
   getColorList,
   getConfigList,
-  EMPTY_VARIABLE_STYLE_PATCH,
   isVariableSelectionDisabled,
   normalizeSelectOptions,
   patchSelectedVariableStyle,
   readStyleValue,
-} from "./variableStyleHelpers";
+} from "./helpers";
+import { EMPTY_VARIABLE_STYLE_PATCH } from "../shared-style";
 
 /**
  * 开关类菜单（加粗/斜体/下划线/删除线）。

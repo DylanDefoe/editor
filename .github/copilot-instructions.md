@@ -20,9 +20,8 @@
   - IF modal create/edit lifecycle (`useIfFunctionModalController`),
   - per-card handlers (`useEditorCardHandlers`).
 - Custom rich-text behavior is implemented as wangEditor extensions in `src/modules/`:
-  - `variableModule.js` defines variable inline-void nodes (`{{key}}`) with parse/render/serialize support.
-  - `ifFunctionModule.js` defines IF start/end inline-void nodes (`{{? condition }}` / `{{/}}`) with parse/render/serialize support.
-  - `variableStyleMenus.js` + related files register variable style toolbar menus.
+  - `variable/` is split by responsibility (`render-elem`, `elem-to-html`, `parse-elem-html`, `plugin`, `menu/*`) and handles variable inline-void nodes (`{{key}}`) plus variable style menus.
+  - `ifFunction/` is split by responsibility (`render-elem`, `elem-to-html`, `parse-elem-html`, `plugin`) and handles IF start/end inline-void nodes (`{{? condition }}` / `{{/}}`).
 - `RichEditor.jsx` is the wangEditor React wrapper with dual toolbars (default + variable style toolbar) and lifecycle cleanup.
 
 ## Key repository conventions

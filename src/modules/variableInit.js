@@ -1,12 +1,8 @@
-import { registerVariableElement } from "./variableModule";
-import { registerVariableStyleMenus } from "./variableStyleMenus";
-import { registerIfFunctionElements } from "./ifFunctionModule";
+import { registerVariableModule } from "./variable";
+import { registerIfFunctionModule } from "./ifFunction";
 
-// 注册变量元素
-registerVariableElement();
+// 注册变量模块
+registerVariableModule();
 
 // 注册函数标签元素
-registerIfFunctionElements();
-
-// 注册变量样式菜单
-registerVariableStyleMenus();
+registerIfFunctionModule();

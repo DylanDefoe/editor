@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import {
   patchIfFunctionStartConditionAtPath,
   patchSelectedIfFunctionStartCondition,
-} from "../utils/ifFunctionNodeUtils";
+} from "../modules/ifFunction/node-utils";
 
 const IF_MODAL_MODE = Object.freeze({
   create: "create",

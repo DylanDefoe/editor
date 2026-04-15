@@ -1,4 +1,4 @@
-import { EMPTY_VALUE } from "./variableStyleConstants";
+import { EMPTY_VALUE } from "./constants";
 
 /**
  * 创建颜色面板 DOM（含默认色按钮），用于 IDropPanelMenu。
@@ -48,4 +48,3 @@ export const createColorPanelElement = ({ colors, activeColor, onSelect }) => {
 
   return panel;
 };
-

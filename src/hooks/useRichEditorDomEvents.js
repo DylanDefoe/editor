@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { IF_FUNCTION_START_ELEMENT_TYPE } from "../config/editorConfig";
-import { getSelectedIfFunctionStartEntry } from "../utils/ifFunctionNodeUtils";
+import { getSelectedIfFunctionStartEntry } from "../modules/ifFunction/node-utils";
 
 /**
  * 统一绑定 RichEditor editable 区域事件：beforeinput 和 function-start 点击。

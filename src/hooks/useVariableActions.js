@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { createVariableNode } from "../utils/variableNodeUtils";
+import { createVariableNode } from "../modules/variable/node-utils";
 import useEditorRef from "./useEditorRef";
 
 /**

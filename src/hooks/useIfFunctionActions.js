@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import {
   createIfFunctionEndNode,
   createIfFunctionStartNode,
-} from "../utils/ifFunctionNodeUtils";
+} from "../modules/ifFunction/node-utils";
 import useEditorRef from "./useEditorRef";
 
 /**
