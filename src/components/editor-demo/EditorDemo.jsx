@@ -56,8 +56,8 @@ function EditorDemo() {
   const {
     open: ifModalOpen,
     initialCondition: ifModalInitialCondition,
-    openForCreate,
-    openForEdit,
+    openForCreate: openIfModalForCreate,
+    openForEdit: openIfModalForEdit,
     closeAndReset: handleIfModalCancel,
     saveCondition: handleIfModalSave,
   } = useIfFunctionModalController({
@@ -101,7 +101,7 @@ function EditorDemo() {
   const handleVariableSelect = useCallback(
     (preset) => {
       if (isIfFunctionPreset(preset)) {
-        openForCreate({ deleteMention: true });
+        openIfModalForCreate({ deleteMention: true });
         closeMention();
         return;
       }
@@ -127,7 +127,7 @@ function EditorDemo() {
     [
       closeMention,
       insertVariable,
-      openForCreate,
+      openIfModalForCreate,
       openJoinModalForCreate,
       openLoopModalForCreate,
     ],
@@ -136,7 +136,7 @@ function EditorDemo() {
   const handleVariableClick = useCallback(
     (preset) => {
       if (isIfFunctionPreset(preset)) {
-        openForCreate();
+        openIfModalForCreate();
         return;
       }
       if (isJoinFunctionPreset(preset)) {
@@ -154,12 +154,12 @@ function EditorDemo() {
 
       insertVariable(preset.key, false);
     },
-    [insertVariable, openForCreate, openJoinModalForCreate, openLoopModalForCreate],
+    [insertVariable, openIfModalForCreate, openJoinModalForCreate, openLoopModalForCreate],
   );
 
   const handleIfFunctionStartClick = useCallback(({ condition, path }) => {
-    openForEdit(condition, path);
-  }, [openForEdit]);
+    openIfModalForEdit(condition, path);
+  }, [openIfModalForEdit]);
 
   const handleJoinFunctionClick = useCallback(({ variableName, separator, path }) => {
     openJoinModalForEdit(

@@ -10,7 +10,7 @@ import { getSelectedJoinFunctionEntry } from "../modules/joinFunction/node-utils
 import { getSelectedLoopFunctionEntry } from "../modules/loopFunction/node-utils";
 
 /**
- * 统一绑定 RichEditor editable 区域事件：beforeinput、ifFunction 与 joinFunction 点击。
+ * 统一绑定 RichEditor editable 区域事件：beforeinput、ifFunction 与 joinFunction 与 loopFunction 的点击事件。
  */
 function useRichEditorDomEvents({
   editor,
