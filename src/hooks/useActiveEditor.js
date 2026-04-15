@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 
-function useFocusEditor() {
+function useActiveEditor() {
   // 当前激活的编辑器实例，用于变量插入和 mention 定位。
   const [activeEditor, setActiveEditor] = useState(null);
   const editorsRef = useRef([]);
@@ -34,4 +34,4 @@ function useFocusEditor() {
   };
 }
 
-export default useFocusEditor;
+export default useActiveEditor;

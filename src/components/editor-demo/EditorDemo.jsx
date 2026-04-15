@@ -9,7 +9,7 @@ import useIfFunctionActions from "../../hooks/useIfFunctionActions";
 import useJoinFunctionActions from "../../hooks/useJoinFunctionActions";
 import useLoopFunctionActions from "../../hooks/useLoopFunctionActions";
 import VariableMention from "./VariableMention";
-import useFocusEditor from "../../hooks/useFocusEditor";
+import useActiveEditor from "../../hooks/useActiveEditor";
 import useEditorItems from "../../hooks/useEditorItems";
 import IfFunctionModal from "./IfFunctionModal";
 import useIfFunctionModalController from "../../hooks/useIfFunctionModalController";
@@ -33,7 +33,7 @@ function EditorDemo() {
     initialHtml: EDITOR_DEFAULT_VALUE,
   });
 
-  const { activeEditor, registerEditor, syncActiveEditor } = useFocusEditor();
+  const { activeEditor, registerEditor, syncActiveEditor } = useActiveEditor();
 
   const { insertVariable } = useVariableActions({
     editor: activeEditor,
