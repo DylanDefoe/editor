@@ -27,6 +27,11 @@ export const VARIABLE_PRESETS = [
     label: "性别",
   },
   {
+    type: VARIABLE_PRESET_TYPE,
+    value: "location",
+    label: "居住地",
+  },
+  {
     type: IF_FUNCTION_PRESET_TYPE,
     value: "if function",
     label: "IF函数",

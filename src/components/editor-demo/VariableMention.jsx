@@ -123,7 +123,6 @@ function VariableMention({
       ref={containerRef}
       className="mention-shell"
       style={{
-        width: VARIABLE_MENTION_CONFIG.dropdownWidth,
         top: position?.top ?? 0,
         left: position?.left ?? 0,
       }}

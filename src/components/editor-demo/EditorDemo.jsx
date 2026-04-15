@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import VariablePresetPanel from "./VariablePresetPanel";
 import { VARIABLE_PRESETS } from "../../config/variable";
 import { EDITOR_DEFAULT_VALUE } from "../../config/editor";
@@ -114,12 +114,11 @@ function EditorDemo() {
         return;
       }
 
-      const variableKey = preset?.value;
-      if (!variableKey) {
+      if (!preset?.value) {
         return;
       }
 
-      insertVariable(variableKey, true);
+      insertVariable(preset.value, true);
       closeMention();
     },
     [
@@ -152,47 +151,50 @@ function EditorDemo() {
 
       insertVariable(preset.value, false);
     },
-    [insertVariable, openIfModalForCreate, openJoinModalForCreate, openLoopModalForCreate],
+    [
+      insertVariable,
+      openIfModalForCreate,
+      openJoinModalForCreate,
+      openLoopModalForCreate,
+    ],
   );
 
-  const handleIfFunctionStartClick = useCallback(({ condition, path }) => {
-    openIfModalForEdit(condition, path);
-  }, [openIfModalForEdit]);
-
-  const handleJoinFunctionClick = useCallback(({ variableName, separator, path }) => {
-    openJoinModalForEdit(
-      {
-        variableName,
-        separator,
-      },
-      path,
-    );
-  }, [openJoinModalForEdit]);
-
-  const handleLoopFunctionClick = useCallback(({ variableName, path }) => {
-    openLoopModalForEdit(variableName, path);
-  }, [openLoopModalForEdit]);
-
-  const {
-    editorCards,
-    editorChangeHandlers,
-    editorCopyHandlers,
-  } = useEditorCardHandlers({
-    editorItems,
-    updateEditorHtml,
-    syncActiveEditor,
-    copyEditor,
-  });
-
-  const mentionVariables = useMemo(
-    () => VARIABLE_PRESETS,
-    [],
+  const handleIfFunctionStartClick = useCallback(
+    ({ condition, path }) => {
+      openIfModalForEdit(condition, path);
+    },
+    [openIfModalForEdit],
   );
 
-  const modalVariables = useMemo(
-    () => getMentionVariables(VARIABLE_PRESETS),
-    [],
+  const handleJoinFunctionClick = useCallback(
+    ({ variableName, separator, path }) => {
+      openJoinModalForEdit(
+        {
+          variableName,
+          separator,
+        },
+        path,
+      );
+    },
+    [openJoinModalForEdit],
   );
+
+  const handleLoopFunctionClick = useCallback(
+    ({ variableName, path }) => {
+      openLoopModalForEdit(variableName, path);
+    },
+    [openLoopModalForEdit],
+  );
+
+  const { editorCards, editorChangeHandlers, editorCopyHandlers } =
+    useEditorCardHandlers({
+      editorItems,
+      updateEditorHtml,
+      syncActiveEditor,
+      copyEditor,
+    });
+
+  const mentionVariables = getMentionVariables(VARIABLE_PRESETS); // 仅普通变量可用于 mention
 
   return (
     <div className="editor-demo-layout">
@@ -206,28 +208,28 @@ function EditorDemo() {
         <VariableMention
           key={activeEditor?.id ?? "mention"}
           open={mentionOpen}
-          variables={mentionVariables}
+          variables={VARIABLE_PRESETS}
           position={mentionPosition}
           onSelect={handleVariableSelect}
           onClose={closeMention}
         />
         <IfFunctionModal
           open={ifModalOpen}
-          variables={modalVariables}
+          variables={mentionVariables}
           initialCondition={ifModalInitialCondition}
           onCancel={handleIfModalCancel}
           onSave={handleIfModalSave}
         />
         <JoinFunctionModal
           open={joinModalOpen}
-          variables={modalVariables}
+          variables={mentionVariables}
           initialValues={joinModalInitialValues}
           onCancel={handleJoinModalCancel}
           onSave={handleJoinModalSave}
         />
         <LoopFunctionModal
           open={loopModalOpen}
-          variables={modalVariables}
+          variables={mentionVariables}
           initialVariableName={loopModalInitialVariableName}
           onCancel={handleLoopModalCancel}
           onSave={handleLoopModalSave}
@@ -238,18 +240,20 @@ function EditorDemo() {
               <div
                 key={item.id}
                 className="reveal-item"
-                style={{ animationDelay: `${Math.min(item.index * 80, 320)}ms` }}
+                style={{
+                  animationDelay: `${Math.min(item.index * 80, 320)}ms`,
+                }}
               >
                 <EditorCard
                   index={item.index}
                   value={item.html}
                   onChange={editorChangeHandlers[item.id]}
+                  onCopy={editorCopyHandlers[item.id]}
                   onEditorMount={registerEditor}
                   onBeforeInput={handleEditorBeforeInput}
                   onIfFunctionStartClick={handleIfFunctionStartClick}
                   onJoinFunctionClick={handleJoinFunctionClick}
                   onLoopFunctionClick={handleLoopFunctionClick}
-                  onCopy={editorCopyHandlers[item.id]}
                 />
               </div>
             );
