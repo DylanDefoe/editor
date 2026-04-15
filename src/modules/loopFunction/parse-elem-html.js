@@ -1,7 +1,7 @@
 import {
   LOOP_FUNCTION_END_ELEMENT_TYPE,
   LOOP_FUNCTION_START_ELEMENT_TYPE,
-} from "../../config/editorConfig";
+} from "../../config/variable";
 
 /**
  * loopFunction HTML 解析配置：分别解析 start/end。
@@ -40,4 +40,3 @@ const parseElemHtmlConfs = [
 ];
 
 export default parseElemHtmlConfs;
-

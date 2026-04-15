@@ -1,5 +1,5 @@
 import { SlateEditor, SlateTransforms } from "@wangeditor/editor";
-import { JOIN_FUNCTION_ELEMENT_TYPE } from "../../config/editorConfig";
+import { JOIN_FUNCTION_ELEMENT_TYPE } from "../../config/variable";
 
 /**
  * 规整 join 参数，避免写入脏值。

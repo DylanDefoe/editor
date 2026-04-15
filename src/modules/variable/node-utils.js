@@ -1,4 +1,4 @@
-import { VARIABLE_ELEMENT_TYPE } from "../../config/editorConfig";
+import { VARIABLE_ELEMENT_TYPE } from "../../config/variable";
 
 /**
  * 创建变量节点

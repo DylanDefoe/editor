@@ -2,7 +2,7 @@ import { SlateEditor, SlateNode, SlateTransforms } from "@wangeditor/editor";
 import {
   LOOP_FUNCTION_END_ELEMENT_TYPE,
   LOOP_FUNCTION_START_ELEMENT_TYPE,
-} from "../../config/editorConfig";
+} from "../../config/variable";
 
 /**
  * 规整 loop 变量名，避免写入脏值。

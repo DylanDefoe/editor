@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Form, Input, Mentions, Modal } from "antd";
 
 const normalizeMentionOption = (item) => {
-  const value = item?.key ?? item?.value;
+  const value = item?.value;
   const label = item?.label ?? value;
 
   if (value === undefined || value === null || value === "") {
@@ -110,4 +110,3 @@ function JoinFunctionModal({
 }
 
 export default JoinFunctionModal;
-

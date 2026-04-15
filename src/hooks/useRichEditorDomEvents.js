@@ -4,7 +4,7 @@ import {
   JOIN_FUNCTION_ELEMENT_TYPE,
   LOOP_FUNCTION_END_ELEMENT_TYPE,
   LOOP_FUNCTION_START_ELEMENT_TYPE,
-} from "../config/editorConfig";
+} from "../config/variable";
 import { getSelectedIfFunctionStartEntry } from "../modules/ifFunction/node-utils";
 import { getSelectedJoinFunctionEntry } from "../modules/joinFunction/node-utils";
 import { getSelectedLoopFunctionEntry } from "../modules/loopFunction/node-utils";

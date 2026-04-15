@@ -1,7 +1,7 @@
 import {
   IF_FUNCTION_END_ELEMENT_TYPE,
   IF_FUNCTION_START_ELEMENT_TYPE,
-} from "../../config/editorConfig";
+} from "../../config/variable";
 
 /**
  * 规整 condition 文本，避免写入脏值。

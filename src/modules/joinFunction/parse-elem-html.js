@@ -1,4 +1,4 @@
-import { JOIN_FUNCTION_ELEMENT_TYPE } from "../../config/editorConfig";
+import { JOIN_FUNCTION_ELEMENT_TYPE } from "../../config/variable";
 import {
   mergeVariableStyles,
   parseVariableStyleFromDom,

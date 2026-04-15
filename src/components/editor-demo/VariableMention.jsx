@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { VARIABLE_MENTION_CONFIG } from "../../config/editorConfig";
+import { VARIABLE_MENTION_CONFIG } from "../../config/mention";
 import { isFunctionPreset } from "../../utils/variablePresetUtils";
 
 /**
@@ -14,7 +14,7 @@ const filterMentionOptions = (variables = [], keyword = "") => {
 
   return variables.filter((item) => {
     return (
-      item.key.toLowerCase().includes(normalizedKeyword) ||
+      item.value.toLowerCase().includes(normalizedKeyword) ||
       item.label.toLowerCase().includes(normalizedKeyword)
     );
   });
@@ -150,7 +150,7 @@ function VariableMention({
 
             return (
               <div
-                key={option.key}
+                key={option.value}
                 className={`mention-item ${isActive ? "is-active" : ""}`}
                 onMouseDown={(event) => {
                   event.preventDefault();
@@ -162,8 +162,8 @@ function VariableMention({
                 <span>{option.label}</span>
                 <span className="mention-item-key">
                   {isFunctionPreset(option)
-                    ? `配置 ${option.label}`
-                    : `{{${option.key}}}`}
+                    ? `配置${option.label}`
+                    : `{{${option.value}}}`}
                 </span>
               </div>
             );

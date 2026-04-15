@@ -1,5 +1,5 @@
 import { DomEditor } from "@wangeditor/editor";
-import { JOIN_FUNCTION_ELEMENT_TYPE } from "../../config/editorConfig";
+import { JOIN_FUNCTION_ELEMENT_TYPE } from "../../config/variable";
 import {
   buildVariableStyleObject,
   VARIABLE_BASE_STYLE,

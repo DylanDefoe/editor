@@ -9,7 +9,7 @@ const normalizeOperand = (value) => {
 };
 
 const normalizeMentionOption = (item) => {
-  const value = item?.key ?? item?.value;
+  const value = item?.value;
   const label = item?.label ?? value;
 
   if (value === undefined || value === null || value === "") {

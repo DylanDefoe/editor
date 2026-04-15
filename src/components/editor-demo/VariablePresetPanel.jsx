@@ -1,5 +1,3 @@
-import { isFunctionPreset } from "../../utils/variablePresetUtils";
-
 function VariablePresetPanel({
   // 变量列表
   variables,
@@ -13,18 +11,11 @@ function VariablePresetPanel({
       </header>
       <div className="variable-list">
         {variables.map((variable) => {
-          const functionPreset = isFunctionPreset(variable);
-
           return (
-            <div className="variable-item" key={variable.key}>
+            <div className="variable-item" key={variable.value}>
               <button
                 type="button"
                 className="variable-tag"
-                title={
-                  functionPreset
-                    ? `配置 ${variable.label}`
-                    : `插入 {{${variable.key}}}`
-                }
                 onClick={() => {
                   onVariableClick?.(variable);
                 }}

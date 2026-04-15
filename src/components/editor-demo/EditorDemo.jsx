@@ -1,9 +1,7 @@
 import { useCallback, useMemo } from "react";
 import VariablePresetPanel from "./VariablePresetPanel";
-import {
-  VARIABLE_PRESETS,
-  EDITOR_DEFAULT_VALUE,
-} from "../../config/editorConfig";
+import { VARIABLE_PRESETS } from "../../config/variable";
+import { EDITOR_DEFAULT_VALUE } from "../../config/editor";
 import EditorCard from "./EditorCard";
 import useVariableMention from "../../hooks/useVariableMention";
 import useVariableActions from "../../hooks/useVariableActions";
@@ -116,7 +114,7 @@ function EditorDemo() {
         return;
       }
 
-      const variableKey = preset?.key;
+      const variableKey = preset?.value;
       if (!variableKey) {
         return;
       }
@@ -148,11 +146,11 @@ function EditorDemo() {
         return;
       }
 
-      if (!preset?.key) {
+      if (!preset?.value) {
         return;
       }
 
-      insertVariable(preset.key, false);
+      insertVariable(preset.value, false);
     },
     [insertVariable, openIfModalForCreate, openJoinModalForCreate, openLoopModalForCreate],
   );

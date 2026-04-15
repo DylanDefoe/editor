@@ -2,7 +2,7 @@ import { DomEditor } from "@wangeditor/editor";
 import {
   LOOP_FUNCTION_END_ELEMENT_TYPE,
   LOOP_FUNCTION_START_ELEMENT_TYPE,
-} from "../../config/editorConfig";
+} from "../../config/variable";
 import {
   isLoopFunctionStartNode,
 } from "./node-utils";
@@ -63,4 +63,3 @@ const renderElemConfs = [
 ];
 
 export default renderElemConfs;
-

@@ -2,7 +2,7 @@ import { DomEditor } from "@wangeditor/editor";
 import {
   IF_FUNCTION_END_ELEMENT_TYPE,
   IF_FUNCTION_START_ELEMENT_TYPE,
-} from "../../config/editorConfig";
+} from "../../config/variable";
 import { isIfFunctionStartNode } from "./node-utils";
 import { VARIABLE_BASE_STYLE } from "../variable/shared-style";
 

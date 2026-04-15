@@ -1,7 +1,7 @@
 import {
   LOOP_FUNCTION_END_ELEMENT_TYPE,
   LOOP_FUNCTION_START_ELEMENT_TYPE,
-} from "../../config/editorConfig";
+} from "../../config/variable";
 
 const createLoopStartText = (variableName) => `{{? ${variableName} }}`;
 const createLoopEndText = (variableName) => `{{/${variableName}}}`;
@@ -35,4 +35,3 @@ const elemToHtmlConfs = [
 ];
 
 export default elemToHtmlConfs;
-

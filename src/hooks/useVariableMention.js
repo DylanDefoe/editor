@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { VARIABLE_MENTION_CONFIG } from "../config/editorConfig";
+import { VARIABLE_MENTION_CONFIG } from "../config/mention";
 
 function useVariableMention({
   // 编辑器实例

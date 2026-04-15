@@ -2,7 +2,7 @@ import { SlateEditor, SlateTransforms } from "@wangeditor/editor";
 import {
   IF_FUNCTION_START_ELEMENT_TYPE,
   IF_FUNCTION_END_ELEMENT_TYPE,
-} from "../../config/editorConfig";
+} from "../../config/variable";
 
 /**
  * 创建函数标签开始节点

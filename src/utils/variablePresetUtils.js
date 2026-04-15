@@ -2,7 +2,7 @@ import {
   IF_FUNCTION_PRESET_TYPE,
   LOOP_FUNCTION_PRESET_TYPE,
   JOIN_FUNCTION_PRESET_TYPE,
-} from "../config/editorConfig";
+} from "../config/variable";
 
 /**
  * 判断预设是否为 IF 函数预设。
@@ -40,14 +40,13 @@ export const isFunctionPreset = (preset) => {
  * 将变量预设转换为 mention 组件统一结构。
  */
 export const toMentionVariable = (preset) => {
-  if (!preset?.key) {
+  if (!preset?.value) {
     return null;
   }
 
   return {
-    key: preset.key,
-    value: preset.key,
-    label: preset.label || preset.key,
+    value: preset.value,
+    label: preset.label || preset.value,
   };
 };
 
