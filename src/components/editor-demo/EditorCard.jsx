@@ -19,6 +19,8 @@ export default function EditorCard({
   onIfFunctionStartClick,
   // 点击 JOIN 函数标签
   onJoinFunctionClick,
+  // 点击 LOOP 函数标签
+  onLoopFunctionClick,
   // 复制当前编辑器
   onCopy,
 }) {
@@ -39,6 +41,7 @@ export default function EditorCard({
           onBeforeInput={onBeforeInput}
           onIfFunctionStartClick={onIfFunctionStartClick}
           onJoinFunctionClick={onJoinFunctionClick}
+          onLoopFunctionClick={onLoopFunctionClick}
         />
 
         <PreviewCard html={value} />

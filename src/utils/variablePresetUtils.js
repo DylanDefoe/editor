@@ -1,5 +1,6 @@
 import {
   IF_FUNCTION_PRESET_TYPE,
+  LOOP_FUNCTION_PRESET_TYPE,
   JOIN_FUNCTION_PRESET_TYPE,
 } from "../config/editorConfig";
 
@@ -18,10 +19,21 @@ export const isJoinFunctionPreset = (preset) => {
 };
 
 /**
- * 判断预设是否为函数预设（IF/JOIN）。
+ * 判断预设是否为 LOOP 函数预设。
+ */
+export const isLoopFunctionPreset = (preset) => {
+  return preset?.type === LOOP_FUNCTION_PRESET_TYPE;
+};
+
+/**
+ * 判断预设是否为函数预设（IF/LOOP/JOIN）。
  */
 export const isFunctionPreset = (preset) => {
-  return isIfFunctionPreset(preset) || isJoinFunctionPreset(preset);
+  return (
+    isIfFunctionPreset(preset) ||
+    isLoopFunctionPreset(preset) ||
+    isJoinFunctionPreset(preset)
+  );
 };
 
 /**

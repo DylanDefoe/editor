@@ -15,14 +15,15 @@
 - `src/components/editor-demo/EditorDemo.jsx` is the composition root and orchestration layer. It wires:
   - editor list state (`useEditorItems`) and editor duplication flow,
   - active editor tracking (`useFocusEditor`),
-  - variable/if-function/join-function insertion (`useVariableActions`, `useIfFunctionActions`, `useJoinFunctionActions`),
+  - variable/if-function/join-function/loop-function insertion (`useVariableActions`, `useIfFunctionActions`, `useJoinFunctionActions`, `useLoopFunctionActions`),
   - mention trigger/position logic (`useVariableMention`),
-  - IF/JOIN modal create-edit lifecycle (`useIfFunctionModalController`, `useJoinFunctionModalController`),
+  - IF/JOIN/LOOP modal create-edit lifecycle (`useIfFunctionModalController`, `useJoinFunctionModalController`, `useLoopFunctionModalController`),
   - per-card handlers (`useEditorCardHandlers`).
 - Custom rich-text behavior is implemented as wangEditor extensions in `src/modules/`:
   - `variable/` is split by responsibility (`render-elem`, `elem-to-html`, `parse-elem-html`, `plugin`, `menu/*`) and handles variable inline-void nodes (`{{key}}`) plus variable style menus.
   - `ifFunction/` is split by responsibility (`render-elem`, `elem-to-html`, `parse-elem-html`, `plugin`) and handles IF start/end inline-void nodes (`{{? condition }}` / `{{/}}`).
   - `joinFunction/` is split by responsibility (`render-elem`, `elem-to-html`, `parse-elem-html`, `plugin`) and handles JOIN inline-void nodes (`{{? join(var,'sep')}}`).
+  - `loopFunction/` is split by responsibility (`render-elem`, `elem-to-html`, `parse-elem-html`, `plugin`) and handles LOOP start/end inline-void nodes (`{{? variable }}` / `{{/variable}}`) with editable middle body text.
   - Variable style menus also apply to `joinFunction` nodes (same toolbar keys and style fields).
 - `RichEditor.jsx` is the wangEditor React wrapper with dual toolbars (default + variable style toolbar) and lifecycle cleanup.
 

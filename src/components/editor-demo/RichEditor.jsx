@@ -18,6 +18,8 @@ function RichEditor({
   onIfFunctionStartClick,
   // 点击 JOIN 函数回调
   onJoinFunctionClick,
+  // 点击 LOOP 函数回调
+  onLoopFunctionClick,
 }) {
   const [editor, setEditor] = useState(null);
 
@@ -26,6 +28,7 @@ function RichEditor({
     onBeforeInput,
     onIfFunctionStartClick,
     onJoinFunctionClick,
+    onLoopFunctionClick,
   });
 
   // 通过 memo 保持配置引用稳定，避免不必要重渲染。

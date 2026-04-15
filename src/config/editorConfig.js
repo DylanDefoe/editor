@@ -7,8 +7,11 @@ export const VARIABLE_TOKEN_CONFIG = {
 export const VARIABLE_ELEMENT_TYPE = "variable";
 export const IF_FUNCTION_START_ELEMENT_TYPE = "if-function-start";
 export const IF_FUNCTION_END_ELEMENT_TYPE = "if-function-end";
+export const LOOP_FUNCTION_START_ELEMENT_TYPE = "loop-function-start";
+export const LOOP_FUNCTION_END_ELEMENT_TYPE = "loop-function-end";
 export const JOIN_FUNCTION_ELEMENT_TYPE = "join-function";
 export const IF_FUNCTION_PRESET_TYPE = "if-function";
+export const LOOP_FUNCTION_PRESET_TYPE = "loop-function";
 export const JOIN_FUNCTION_PRESET_TYPE = "join-function";
 
 export const VARIABLE_MENTION_CONFIG = {
@@ -44,5 +47,11 @@ export const VARIABLE_PRESETS = [
     type: JOIN_FUNCTION_PRESET_TYPE,
     key: "join function",
     label: "JOIN函数",
+  },
+  {
+    type: LOOP_FUNCTION_PRESET_TYPE,
+    key: "loop function",
+    label: "LOOP函数",
+    bodyText: "需要展示的文案",
   },
 ];

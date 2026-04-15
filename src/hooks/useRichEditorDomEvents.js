@@ -2,9 +2,12 @@ import { useEffect } from "react";
 import {
   IF_FUNCTION_START_ELEMENT_TYPE,
   JOIN_FUNCTION_ELEMENT_TYPE,
+  LOOP_FUNCTION_END_ELEMENT_TYPE,
+  LOOP_FUNCTION_START_ELEMENT_TYPE,
 } from "../config/editorConfig";
 import { getSelectedIfFunctionStartEntry } from "../modules/ifFunction/node-utils";
 import { getSelectedJoinFunctionEntry } from "../modules/joinFunction/node-utils";
+import { getSelectedLoopFunctionEntry } from "../modules/loopFunction/node-utils";
 
 /**
  * 统一绑定 RichEditor editable 区域事件：beforeinput、ifFunction 与 joinFunction 点击。
@@ -14,6 +17,7 @@ function useRichEditorDomEvents({
   onBeforeInput,
   onIfFunctionStartClick,
   onJoinFunctionClick,
+  onLoopFunctionClick,
 }) {
   useEffect(() => {
     if (!editor) {
@@ -80,9 +84,33 @@ function useRichEditorDomEvents({
       onJoinFunctionClick({ variableName, separator, path });
     };
 
+    const handleLoopFunctionClick = (event) => {
+      if (!onLoopFunctionClick) {
+        return;
+      }
+
+      const loopElement = event.target?.closest?.(
+        `span[data-w-e-type="${LOOP_FUNCTION_START_ELEMENT_TYPE}"],span[data-w-e-type="${LOOP_FUNCTION_END_ELEMENT_TYPE}"]`,
+      );
+      if (!loopElement) {
+        return;
+      }
+
+      const variableName = String(loopElement.getAttribute("data-variable-name") || "").trim();
+      if (!variableName) {
+        return;
+      }
+
+      const nodeType = loopElement.getAttribute("data-w-e-type") || "";
+      const entry = getSelectedLoopFunctionEntry(editor);
+      const path = entry ? entry[1] : null;
+      onLoopFunctionClick({ variableName, path, nodeType });
+    };
+
     const handleClick = (event) => {
       handleIfFunctionClick(event);
       handleJoinFunctionClick(event);
+      handleLoopFunctionClick(event);
     };
 
     editableContainer.addEventListener("beforeinput", handleBeforeInput);
@@ -92,7 +120,13 @@ function useRichEditorDomEvents({
       editableContainer.removeEventListener("beforeinput", handleBeforeInput);
       editableContainer.removeEventListener("click", handleClick);
     };
-  }, [editor, onBeforeInput, onIfFunctionStartClick, onJoinFunctionClick]);
+  }, [
+    editor,
+    onBeforeInput,
+    onIfFunctionStartClick,
+    onJoinFunctionClick,
+    onLoopFunctionClick,
+  ]);
 }
 
 export default useRichEditorDomEvents;

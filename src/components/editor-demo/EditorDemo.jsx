@@ -9,6 +9,7 @@ import useVariableMention from "../../hooks/useVariableMention";
 import useVariableActions from "../../hooks/useVariableActions";
 import useIfFunctionActions from "../../hooks/useIfFunctionActions";
 import useJoinFunctionActions from "../../hooks/useJoinFunctionActions";
+import useLoopFunctionActions from "../../hooks/useLoopFunctionActions";
 import VariableMention from "./VariableMention";
 import useFocusEditor from "../../hooks/useFocusEditor";
 import useEditorItems from "../../hooks/useEditorItems";
@@ -16,11 +17,14 @@ import IfFunctionModal from "./IfFunctionModal";
 import useIfFunctionModalController from "../../hooks/useIfFunctionModalController";
 import JoinFunctionModal from "./JoinFunctionModal";
 import useJoinFunctionModalController from "../../hooks/useJoinFunctionModalController";
+import LoopFunctionModal from "./LoopFunctionModal";
+import useLoopFunctionModalController from "../../hooks/useLoopFunctionModalController";
 import useEditorCardHandlers from "../../hooks/useEditorCardHandlers";
 import {
   getMentionVariables,
   isJoinFunctionPreset,
   isIfFunctionPreset,
+  isLoopFunctionPreset,
 } from "../../utils/variablePresetUtils";
 
 /**
@@ -42,6 +46,10 @@ function EditorDemo() {
   });
 
   const { insertJoinFunction } = useJoinFunctionActions({
+    editor: activeEditor,
+  });
+
+  const { insertLoopFunction } = useLoopFunctionActions({
     editor: activeEditor,
   });
 
@@ -70,6 +78,18 @@ function EditorDemo() {
   });
 
   const {
+    open: loopModalOpen,
+    initialVariableName: loopModalInitialVariableName,
+    openForCreate: openLoopModalForCreate,
+    openForEdit: openLoopModalForEdit,
+    closeAndReset: handleLoopModalCancel,
+    saveVariableName: handleLoopModalSave,
+  } = useLoopFunctionModalController({
+    activeEditor,
+    insertLoopFunction,
+  });
+
+  const {
     open: mentionOpen,
     position: mentionPosition,
     handleEditorBeforeInput,
@@ -90,6 +110,11 @@ function EditorDemo() {
         closeMention();
         return;
       }
+      if (isLoopFunctionPreset(preset)) {
+        openLoopModalForCreate({ deleteMention: true });
+        closeMention();
+        return;
+      }
 
       const variableKey = preset?.key;
       if (!variableKey) {
@@ -99,7 +124,13 @@ function EditorDemo() {
       insertVariable(variableKey, true);
       closeMention();
     },
-    [closeMention, insertVariable, openForCreate, openJoinModalForCreate],
+    [
+      closeMention,
+      insertVariable,
+      openForCreate,
+      openJoinModalForCreate,
+      openLoopModalForCreate,
+    ],
   );
 
   const handleVariableClick = useCallback(
@@ -112,6 +143,10 @@ function EditorDemo() {
         openJoinModalForCreate();
         return;
       }
+      if (isLoopFunctionPreset(preset)) {
+        openLoopModalForCreate();
+        return;
+      }
 
       if (!preset?.key) {
         return;
@@ -119,7 +154,7 @@ function EditorDemo() {
 
       insertVariable(preset.key, false);
     },
-    [insertVariable, openForCreate, openJoinModalForCreate],
+    [insertVariable, openForCreate, openJoinModalForCreate, openLoopModalForCreate],
   );
 
   const handleIfFunctionStartClick = useCallback(({ condition, path }) => {
@@ -135,6 +170,10 @@ function EditorDemo() {
       path,
     );
   }, [openJoinModalForEdit]);
+
+  const handleLoopFunctionClick = useCallback(({ variableName, path }) => {
+    openLoopModalForEdit(variableName, path);
+  }, [openLoopModalForEdit]);
 
   const {
     editorCards,
@@ -188,6 +227,13 @@ function EditorDemo() {
           onCancel={handleJoinModalCancel}
           onSave={handleJoinModalSave}
         />
+        <LoopFunctionModal
+          open={loopModalOpen}
+          variables={modalVariables}
+          initialVariableName={loopModalInitialVariableName}
+          onCancel={handleLoopModalCancel}
+          onSave={handleLoopModalSave}
+        />
         <div className="editor-cards-stack">
           {editorCards.map((item) => {
             return (
@@ -204,6 +250,7 @@ function EditorDemo() {
                   onBeforeInput={handleEditorBeforeInput}
                   onIfFunctionStartClick={handleIfFunctionStartClick}
                   onJoinFunctionClick={handleJoinFunctionClick}
+                  onLoopFunctionClick={handleLoopFunctionClick}
                   onCopy={editorCopyHandlers[item.id]}
                 />
               </div>
