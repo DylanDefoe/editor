@@ -1,7 +1,7 @@
 import { SlateEditor, SlateTransforms } from "@wangeditor/editor";
 import {
-  FUNCTION_TAG_START_ELEMENT_TYPE,
-  FUNCTION_TAG_END_ELEMENT_TYPE,
+  IF_FUNCTION_START_ELEMENT_TYPE,
+  IF_FUNCTION_END_ELEMENT_TYPE,
 } from "../config/editorConfig";
 
 /**
@@ -9,7 +9,7 @@ import {
  * @param {string} condition - 函数标签条件表达式
  * @returns {Object} Slate 函数标签开始节点对象
  */
-export const createFunctionTagStartNode = (condition) => {
+export const createIfFunctionStartNode = (condition) => {
   if (typeof condition !== "string") {
     throw new Error("Function tag condition is required");
   }
@@ -21,7 +21,7 @@ export const createFunctionTagStartNode = (condition) => {
   }
 
   return {
-    type: FUNCTION_TAG_START_ELEMENT_TYPE,
+    type: IF_FUNCTION_START_ELEMENT_TYPE,
     condition: trimmedCondition,
     children: [{ text: "" }],
   };
@@ -31,9 +31,9 @@ export const createFunctionTagStartNode = (condition) => {
  * 创建函数标签结束节点
  * @returns {Object} Slate 函数标签结束节点对象
  */
-export const createFunctionTagEndNode = () => {
+export const createIfFunctionEndNode = () => {
   return {
-    type: FUNCTION_TAG_END_ELEMENT_TYPE,
+    type: IF_FUNCTION_END_ELEMENT_TYPE,
     children: [{ text: "" }],
   };
 };
@@ -43,8 +43,8 @@ export const createFunctionTagEndNode = () => {
  * @param {Object} node - Slate 节点
  * @returns {boolean}
  */
-export const isFunctionTagStartNode = (node) => {
-  return Boolean(node && node.type === FUNCTION_TAG_START_ELEMENT_TYPE);
+export const isIfFunctionStartNode = (node) => {
+  return Boolean(node && node.type === IF_FUNCTION_START_ELEMENT_TYPE);
 };
 
 /**
@@ -52,8 +52,8 @@ export const isFunctionTagStartNode = (node) => {
  * @param {Object} node - Slate 节点
  * @returns {boolean}
  */
-export const isFunctionTagEndNode = (node) => {
-  return Boolean(node && node.type === FUNCTION_TAG_END_ELEMENT_TYPE);
+export const isIfFunctionEndNode = (node) => {
+  return Boolean(node && node.type === IF_FUNCTION_END_ELEMENT_TYPE);
 };
 
 /**
@@ -68,13 +68,13 @@ const normalizeCondition = (condition) => {
  * @param {Object} editor - wangEditor / Slate editor 实例
  * @returns {[Object, Array] | null}
  */
-export const getSelectedFunctionTagStartEntry = (editor) => {
+export const getSelectedIfFunctionStartEntry = (editor) => {
   if (!editor?.selection) {
     return null;
   }
 
   const entry = SlateEditor.above(editor, {
-    match: (node) => isFunctionTagStartNode(node),
+    match: (node) => isIfFunctionStartNode(node),
     at: editor.selection,
   });
 
@@ -88,7 +88,7 @@ export const getSelectedFunctionTagStartEntry = (editor) => {
  * @param {string} condition - 条件表达式
  * @returns {boolean}
  */
-export const patchFunctionTagStartConditionAtPath = (editor, path, condition) => {
+export const patchIfFunctionStartConditionAtPath = (editor, path, condition) => {
   const normalizedCondition = normalizeCondition(condition);
 
   if (!editor || !Array.isArray(path) || !normalizedCondition) {
@@ -112,13 +112,13 @@ export const patchFunctionTagStartConditionAtPath = (editor, path, condition) =>
  * @param {string} condition - 条件表达式
  * @returns {boolean}
  */
-export const patchSelectedFunctionTagStartCondition = (editor, condition) => {
-  const entry = getSelectedFunctionTagStartEntry(editor);
+export const patchSelectedIfFunctionStartCondition = (editor, condition) => {
+  const entry = getSelectedIfFunctionStartEntry(editor);
 
   if (!entry) {
     return false;
   }
 
   const [, path] = entry;
-  return patchFunctionTagStartConditionAtPath(editor, path, condition);
+  return patchIfFunctionStartConditionAtPath(editor, path, condition);
 };

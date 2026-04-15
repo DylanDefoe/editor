@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 import {
-  patchFunctionTagStartConditionAtPath,
-  patchSelectedFunctionTagStartCondition,
-} from "../utils/functionTagNodeUtils";
+  patchIfFunctionStartConditionAtPath,
+  patchSelectedIfFunctionStartCondition,
+} from "../utils/ifFunctionNodeUtils";
 
 const IF_MODAL_MODE = Object.freeze({
   create: "create",
@@ -14,7 +14,7 @@ const DEFAULT_IF_BODY_TEXT = "需要展示的文案";
 /**
  * 管理 IF 条件弹窗的 create/edit 状态，并统一保存分流逻辑。
  */
-function useIfFunctionModalController({ activeEditor, insertFunctionTag }) {
+function useIfFunctionModalController({ activeEditor, insertIfFunction }) {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(IF_MODAL_MODE.create);
   const [initialCondition, setInitialCondition] = useState("");
@@ -58,20 +58,20 @@ function useIfFunctionModalController({ activeEditor, insertFunctionTag }) {
   const saveCondition = useCallback(
     ({ condition }) => {
       if (mode === IF_MODAL_MODE.edit) {
-        const updated = patchSelectedFunctionTagStartCondition(
+        const updated = patchSelectedIfFunctionStartCondition(
           activeEditor,
           condition,
         );
 
         if (!updated) {
-          patchFunctionTagStartConditionAtPath(
+          patchIfFunctionStartConditionAtPath(
             activeEditor,
             editingStartNodePath,
             condition,
           );
         }
       } else {
-        insertFunctionTag(
+        insertIfFunction(
           condition,
           DEFAULT_IF_BODY_TEXT,
           deleteMentionOnCreate,
@@ -85,7 +85,7 @@ function useIfFunctionModalController({ activeEditor, insertFunctionTag }) {
       closeAndReset,
       deleteMentionOnCreate,
       editingStartNodePath,
-      insertFunctionTag,
+      insertIfFunction,
       mode,
     ],
   );

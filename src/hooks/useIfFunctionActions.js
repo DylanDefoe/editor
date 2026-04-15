@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import {
-  createFunctionTagEndNode,
-  createFunctionTagStartNode,
-} from "../utils/functionTagNodeUtils";
+  createIfFunctionEndNode,
+  createIfFunctionStartNode,
+} from "../utils/ifFunctionNodeUtils";
 import useEditorRef from "./useEditorRef";
 
 /**
@@ -16,12 +16,12 @@ const insertTextAfterInlineVoid = (editor, text) => {
   }
 };
 
-function useFunctionTagActions({
+function useIfFunctionActions({
   editor,
 } = {}) {
   const editorRef = useEditorRef(editor);
 
-  const insertFunctionTag = useCallback(
+  const insertIfFunction = useCallback(
     (condition, bodyText, deleteMention = false) => {
       const currentEditor = editorRef.current;
 
@@ -35,25 +35,25 @@ function useFunctionTagActions({
         currentEditor.deleteBackward("character");
       }
 
-      const functionTagStartNode = createFunctionTagStartNode(condition);
-      const functionTagEndNode = createFunctionTagEndNode();
+      const ifFunctionStartNode = createIfFunctionStartNode(condition);
+      const ifFunctionEndNode = createIfFunctionEndNode();
       const normalizedBodyText = typeof bodyText === "string" ? bodyText : "";
 
-      currentEditor.insertNode(functionTagStartNode);
+      currentEditor.insertNode(ifFunctionStartNode);
       insertTextAfterInlineVoid(currentEditor, normalizedBodyText);
 
-      currentEditor.insertNode(functionTagEndNode);
+      currentEditor.insertNode(ifFunctionEndNode);
       currentEditor.move(1);
     },
     [editorRef],
   );
 
   return {
-    insertFunctionTag,
+    insertIfFunction,
   };
 }
 
 /**
  * 提供 IF 函数标签的插入动作。
  */
-export default useFunctionTagActions;
+export default useIfFunctionActions;

@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { FUNCTION_TAG_START_ELEMENT_TYPE } from "../config/editorConfig";
-import { getSelectedFunctionTagStartEntry } from "../utils/functionTagNodeUtils";
+import { IF_FUNCTION_START_ELEMENT_TYPE } from "../config/editorConfig";
+import { getSelectedIfFunctionStartEntry } from "../utils/ifFunctionNodeUtils";
 
 /**
  * 统一绑定 RichEditor editable 区域事件：beforeinput 和 function-start 点击。
  */
-function useRichEditorDomEvents({ editor, onBeforeInput, onFunctionTagStartClick }) {
+function useRichEditorDomEvents({ editor, onBeforeInput, onIfFunctionStartClick }) {
   useEffect(() => {
     if (!editor) {
       return undefined;
@@ -21,12 +21,12 @@ function useRichEditorDomEvents({ editor, onBeforeInput, onFunctionTagStartClick
     };
 
     const handleClick = (event) => {
-      if (!onFunctionTagStartClick) {
+      if (!onIfFunctionStartClick) {
         return;
       }
 
       const startTagElement = event.target?.closest?.(
-        `span[data-w-e-type="${FUNCTION_TAG_START_ELEMENT_TYPE}"]`,
+        `span[data-w-e-type="${IF_FUNCTION_START_ELEMENT_TYPE}"]`,
       );
 
       if (!startTagElement) {
@@ -38,10 +38,10 @@ function useRichEditorDomEvents({ editor, onBeforeInput, onFunctionTagStartClick
         return;
       }
 
-      const entry = getSelectedFunctionTagStartEntry(editor);
+      const entry = getSelectedIfFunctionStartEntry(editor);
       const path = entry ? entry[1] : null;
 
-      onFunctionTagStartClick({ condition, path });
+      onIfFunctionStartClick({ condition, path });
     };
 
     editableContainer.addEventListener("beforeinput", handleBeforeInput);
@@ -51,7 +51,7 @@ function useRichEditorDomEvents({ editor, onBeforeInput, onFunctionTagStartClick
       editableContainer.removeEventListener("beforeinput", handleBeforeInput);
       editableContainer.removeEventListener("click", handleClick);
     };
-  }, [editor, onBeforeInput, onFunctionTagStartClick]);
+  }, [editor, onBeforeInput, onIfFunctionStartClick]);
 }
 
 export default useRichEditorDomEvents;

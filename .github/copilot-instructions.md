@@ -6,37 +6,30 @@
 - Build production bundle: `pnpm build`
 - Preview production build: `pnpm preview`
 - Lint: `pnpm lint`
-
-Testing:
-- There is currently no test runner configured in `package.json` (no `test` script yet), so single-test commands are not available at this stage.
+- Tests: no test script is configured in `package.json` yet, so there is currently no single-test command.
 
 ## High-level architecture
-- This is a Vite + React (JavaScript, ESM) single-page app.
-- Entry point is `src/main.jsx`, which mounts `App` and globally imports:
-  - wangEditor styles (`@wangeditor/editor/dist/css/style.css`)
-- `src/App.jsx` is a thin shell that renders `EditorDemo`.
-- The main feature lives under `src/components/editor-demo/`:
-  - `EditorDemo.jsx` is the container/orchestrator (owns HTML state, derives text length, composes sections).
-  - `RichTextEditor.jsx` wraps `@wangeditor/editor-for-react` `Toolbar` + `Editor`.
-  - `PreviewCard.jsx` renders current content preview.
-  - `StatsCard.jsx` shows text/html metrics.
-  - `PageHeader.jsx` renders page title/description.
-- Styling is split between global reset/layout (`src/index.css`) and feature page styles (`src/App.css`).
+- This is a Vite + React 17 SPA using wangEditor + Ant Design.
+- App bootstrap is in `src/main.jsx`: global styles are imported, Ant Design locale is set to `zh_CN`, and `src/modules/variableInit` is imported once to register custom wangEditor elements/menus at startup.
+- `src/App.jsx` is a shell: it wraps `EditorDemo` in `ErrorBoundary`.
+- `src/components/editor-demo/EditorDemo.jsx` is the composition root and orchestration layer. It wires:
+  - editor list state (`useEditorItems`) and editor duplication flow,
+  - active editor tracking (`useFocusEditor`),
+  - variable insertion and if-function insertion (`useVariableActions`, `useIfFunctionActions`),
+  - mention trigger/position logic (`useVariableMention`),
+  - IF modal create/edit lifecycle (`useIfFunctionModalController`),
+  - per-card handlers (`useEditorCardHandlers`).
+- Custom rich-text behavior is implemented as wangEditor extensions in `src/modules/`:
+  - `variableModule.js` defines variable inline-void nodes (`{{key}}`) with parse/render/serialize support.
+  - `ifFunctionModule.js` defines IF start/end inline-void nodes (`{{? condition }}` / `{{/}}`) with parse/render/serialize support.
+  - `variableStyleMenus.js` + related files register variable style toolbar menus.
+- `RichEditor.jsx` is the wangEditor React wrapper with dual toolbars (default + variable style toolbar) and lifecycle cleanup.
 
 ## Key repository conventions
-- Keep UI split into small feature components under `src/components/editor-demo/`, with `EditorDemo` as the composition root.
-- For component `props`, add inline comments directly in the function parameter destructuring block (current project convention).
-- Treat editor content as HTML string state at the container level (`EditorDemo`) and pass through props to subcomponents.
-- In wangEditor wrapper components, ensure editor lifecycle cleanup with `editor.destroy()` in `useEffect` teardown.
-- Continue using pnpm for all package and script operations.
-- Hooks 注释规范：`src/hooks/useVariableActions.js` 与 `src/hooks/useVariableMention.js` 需为核心状态、关键流程和编辑器行为覆写点添加简洁注释，重点解释“为什么这样做”，避免无信息量注释。
-
-## 文档
-- 组件注释：在组件函数参数的解构块中直接添加注释，说明每个 prop 的用途和类型。
-- 代码注释：在复杂逻辑或重要步骤前添加简洁的注释，帮助理解代码意图和流程。
-
-## 代码风格
-- 使用现代 JavaScript 语法（ES6+），如箭头函数、解构赋值、模板字符串等。
-- 组件命名使用 PascalCase，文件命名使用 CamelCase。
-- 保持函数组件简洁，避免过度嵌套，必要时拆分成更小的子组件。
-- 公共代码和样式应放在 `src` 目录下的合适位置，避免在组件文件中直接编写过多逻辑或样式。
+- Use `pnpm` for all package/script operations.
+- Keep `EditorDemo` as the orchestration root; push focused behavior into hooks under `src/hooks/` and keep presentational pieces in `src/components/editor-demo/`.
+- Treat editor content as HTML string state in container/hooks (`useEditorItems`) and pass it down via props; editor cards are duplicated by copying the stored HTML.
+- Mention insertion flow is intentional: when triggered by `@`, insertion paths delete the trigger char (`deleteBackward("character")`) before inserting variable/function nodes.
+- For component props, add short inline comments directly inside the function parameter destructuring block (existing local pattern).
+- In wangEditor wrappers, always destroy editor instances in `useEffect` teardown and keep custom node behavior registered through `src/modules/variableInit`.
+- Hooks comment convention (important for this repo): in `src/hooks/useVariableActions.js` and `src/hooks/useVariableMention.js`, keep concise comments on core state, key flow, and editor behavior overrides, focusing on **why**.

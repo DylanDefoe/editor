@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { VARIABLE_MENTION_CONFIG } from "../../config/editorConfig";
-import { isFunctionTagPreset } from "../../utils/variablePresetUtils";
+import { isIfFunctionPreset } from "../../utils/variablePresetUtils";
 
 /**
  * 根据关键字过滤 mention 选项。
@@ -161,7 +161,7 @@ function VariableMention({
               >
                 <span>{option.label}</span>
                 <span className="mention-item-key">
-                  {isFunctionTagPreset(option)
+                  {isIfFunctionPreset(option)
                     ? `配置 ${option.label}`
                     : `{{${option.key}}}`}
                 </span>

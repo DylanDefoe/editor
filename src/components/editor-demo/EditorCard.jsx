@@ -16,7 +16,7 @@ export default function EditorCard({
   // beforeinput 事件回调
   onBeforeInput,
   // 点击函数开始标签
-  onFunctionTagStartClick,
+  onIfFunctionStartClick,
   // 复制当前编辑器
   onCopy,
 }) {
@@ -35,7 +35,7 @@ export default function EditorCard({
           onChange={onChange}
           onMount={onEditorMount}
           onBeforeInput={onBeforeInput}
-          onFunctionTagStartClick={onFunctionTagStartClick}
+          onIfFunctionStartClick={onIfFunctionStartClick}
         />
 
         <PreviewCard html={value} />

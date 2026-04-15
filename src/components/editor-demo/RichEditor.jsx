@@ -15,14 +15,14 @@ function RichEditor({
   // beforeinput 事件回调
   onBeforeInput,
   // 点击函数开始标签回调
-  onFunctionTagStartClick,
+  onIfFunctionStartClick,
 }) {
   const [editor, setEditor] = useState(null);
 
   useRichEditorDomEvents({
     editor,
     onBeforeInput,
-    onFunctionTagStartClick,
+    onIfFunctionStartClick,
   });
 
   // 通过 memo 保持配置引用稳定，避免不必要重渲染。

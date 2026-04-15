@@ -7,7 +7,7 @@ import {
 import EditorCard from "./EditorCard";
 import useVariableMention from "../../hooks/useVariableMention";
 import useVariableActions from "../../hooks/useVariableActions";
-import useFunctionTagActions from "../../hooks/useFunctionTagActions";
+import useIfFunctionActions from "../../hooks/useIfFunctionActions";
 import VariableMention from "./VariableMention";
 import useFocusEditor from "../../hooks/useFocusEditor";
 import useEditorItems from "../../hooks/useEditorItems";
@@ -16,7 +16,7 @@ import useIfFunctionModalController from "../../hooks/useIfFunctionModalControll
 import useEditorCardHandlers from "../../hooks/useEditorCardHandlers";
 import {
   getMentionVariables,
-  isFunctionTagPreset,
+  isIfFunctionPreset,
 } from "../../utils/variablePresetUtils";
 
 /**
@@ -33,7 +33,7 @@ function EditorDemo() {
     editor: activeEditor,
   });
 
-  const { insertFunctionTag } = useFunctionTagActions({
+  const { insertIfFunction } = useIfFunctionActions({
     editor: activeEditor,
   });
 
@@ -46,7 +46,7 @@ function EditorDemo() {
     saveCondition: handleIfModalSave,
   } = useIfFunctionModalController({
     activeEditor,
-    insertFunctionTag,
+    insertIfFunction,
   });
 
   const {
@@ -60,7 +60,7 @@ function EditorDemo() {
 
   const handleVariableSelect = useCallback(
     (preset) => {
-      if (isFunctionTagPreset(preset)) {
+      if (isIfFunctionPreset(preset)) {
         openForCreate({ deleteMention: true });
         closeMention();
         return;
@@ -79,7 +79,7 @@ function EditorDemo() {
 
   const handleVariableClick = useCallback(
     (preset) => {
-      if (isFunctionTagPreset(preset)) {
+      if (isIfFunctionPreset(preset)) {
         openForCreate();
         return;
       }
@@ -93,7 +93,7 @@ function EditorDemo() {
     [insertVariable, openForCreate],
   );
 
-  const handleFunctionTagStartClick = useCallback(({ condition, path }) => {
+  const handleIfFunctionStartClick = useCallback(({ condition, path }) => {
     openForEdit(condition, path);
   }, [openForEdit]);
 
@@ -156,7 +156,7 @@ function EditorDemo() {
                   onChange={editorChangeHandlers[item.id]}
                   onEditorMount={registerEditor}
                   onBeforeInput={handleEditorBeforeInput}
-                  onFunctionTagStartClick={handleFunctionTagStartClick}
+                  onIfFunctionStartClick={handleIfFunctionStartClick}
                   onCopy={editorCopyHandlers[item.id]}
                 />
               </div>

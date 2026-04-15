@@ -1,10 +1,10 @@
-import { FUNCTION_TAG_PRESET_TYPE } from "../config/editorConfig";
+import { IF_FUNCTION_PRESET_TYPE } from "../config/editorConfig";
 
 /**
  * 判断预设是否为 IF 函数预设。
  */
-export const isFunctionTagPreset = (preset) => {
-  return preset?.type === FUNCTION_TAG_PRESET_TYPE;
+export const isIfFunctionPreset = (preset) => {
+  return preset?.type === IF_FUNCTION_PRESET_TYPE;
 };
 
 /**
@@ -27,7 +27,7 @@ export const toMentionVariable = (preset) => {
  */
 export const getMentionVariables = (presets = []) => {
   return presets
-    .filter((preset) => !isFunctionTagPreset(preset))
+    .filter((preset) => !isIfFunctionPreset(preset))
     .map(toMentionVariable)
     .filter(Boolean);
 };
