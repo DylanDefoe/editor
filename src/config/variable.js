@@ -18,7 +18,12 @@ const FUNCTION_PRESET_TYPE_MAP = {
   joinFunc: JOIN_FUNCTION_PRESET_TYPE,
 };
 
-export const VARIABLE_PRESETS = VARIABLE_CONFIG;
+export const VARIABLE_PRESETS = VARIABLE_CONFIG.map((group) => {
+  group.children?.forEach((item) => {
+    item.type = FUNCTION_PRESET_TYPE_MAP[item.value] ?? VARIABLE_PRESET_TYPE;
+  });
+  return group;
+});
 
 export const VARIABLE_MENTION_PRESETS = VARIABLE_CONFIG.flatMap((group) =>
   (group.children ?? []).map((item) => ({
