@@ -1,9 +1,6 @@
 import { useCallback } from "react";
 import VariablePresetPanel from "./VariablePresetPanel";
-import {
-  VARIABLE_PRESETS,
-  VARIABLE_MENTION_PRESETS,
-} from "../../config/variable";
+import { VARIABLE_PRESETS } from "../../config/variable";
 import { EDITOR_DEFAULT_VALUE } from "../../config/editor";
 import EditorCard from "./EditorCard";
 import useVariableMention from "../../hooks/useVariableMention";
@@ -197,7 +194,7 @@ function EditorDemo() {
       copyEditor,
     });
 
-  const mentionVariables = getMentionVariables(VARIABLE_MENTION_PRESETS); // 仅普通变量可用于 mention
+  const mentionVariables = getMentionVariables(VARIABLE_PRESETS); // 仅普通变量可用于 mention
 
   return (
     <div className="editor-demo-layout">
@@ -211,7 +208,7 @@ function EditorDemo() {
         <VariableMention
           key={activeEditor?.id ?? "mention"}
           open={mentionOpen}
-          variables={VARIABLE_MENTION_PRESETS}
+          variables={VARIABLE_PRESETS}
           position={mentionPosition}
           onSelect={handleVariableSelect}
           onClose={closeMention}

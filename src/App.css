@@ -144,9 +144,7 @@ body {
 }
 
 .btn-primary:focus-visible,
-.variable-tag:focus-visible,
-.mention-item:focus-visible,
-.mention-input:focus-visible {
+.variable-tag:focus-visible{
   outline: 2px solid color-mix(in srgb, var(--accent) 70%, white 30%);
   outline-offset: 2px;
 }
@@ -366,58 +364,36 @@ body {
   width: 280px;
   position: fixed;
   z-index: 50;
-  border-radius: 14px;
-  border: 1px solid var(--line-strong);
-  background: var(--surface-elevated);
-  box-shadow: var(--shadow-xl);
-  overflow: hidden;
   transform-origin: top left;
   animation: mentionElasticIn 0.46s cubic-bezier(0.19, 1.36, 0.32, 1) both;
 }
 
-.mention-input {
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid var(--line);
-  color: var(--text);
-  font-size: 0.92rem;
-  padding: 11px 12px;
+.mention-shell .ant-select-open .ant-select-selector {
+  border-color: #2ebd8e !important;
 }
 
-.mention-input::placeholder {
-  color: #948c7e;
+.mention-select-dropdown .ant-select-item-group {
+  color: #6d6457;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 7px 10px 5px;
 }
 
-.mention-list {
-  max-height: 240px;
-  overflow: auto;
-  padding: 6px;
-}
-
-.mention-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+.mention-select-dropdown .ant-select-item-option {
   border-radius: 10px;
-  padding: 9px 10px;
+  margin: 1px 6px;
   color: #3f3c35;
-  cursor: pointer;
   transition:
     background-color 0.18s ease,
     transform 0.16s ease;
 }
 
-.mention-item:hover,
-.mention-item.is-active {
+.mention-select-dropdown
+  .ant-select-item-option-active:not(.ant-select-item-option-disabled),
+.mention-select-dropdown
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
   background: #e6f2ee;
   transform: translateX(2px);
-}
-
-.mention-item-key {
-  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
-  font-size: 0.75rem;
-  color: #2c6658;
 }
 
 .mention-empty {

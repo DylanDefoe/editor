@@ -24,10 +24,3 @@ export const VARIABLE_PRESETS = VARIABLE_CONFIG.map((group) => {
   });
   return group;
 });
-
-export const VARIABLE_MENTION_PRESETS = VARIABLE_CONFIG.flatMap((group) =>
-  (group.children ?? []).map((item) => ({
-    ...item,
-    type: FUNCTION_PRESET_TYPE_MAP[item.value] ?? VARIABLE_PRESET_TYPE,
-  })),
-);
