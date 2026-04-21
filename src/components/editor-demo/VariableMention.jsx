@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { VARIABLE_MENTION_CONFIG } from "../../config/mention";
-import { isFunctionPreset } from "../../utils/variablePresetUtils";
 
 /**
  * 根据关键字过滤 mention 选项。
@@ -14,8 +13,8 @@ const filterMentionOptions = (variables = [], keyword = "") => {
 
   return variables.filter((item) => {
     return (
-      item.value.toLowerCase().includes(normalizedKeyword) ||
-      item.label.toLowerCase().includes(normalizedKeyword)
+      item.searchValue.includes(normalizedKeyword) ||
+      item.searchLabel.includes(normalizedKeyword)
     );
   });
 };
@@ -23,6 +22,28 @@ const filterMentionOptions = (variables = [], keyword = "") => {
 const isNavigableOptionIndex = (index, optionsCount) => {
   return optionsCount > 0 && index >= 0 && index < optionsCount;
 };
+
+const MentionOptionItem = memo(function MentionOptionItem({
+  option,
+  optionIndex,
+  isActive,
+  onSelectOption,
+}) {
+  return (
+    <div
+      data-option-index={optionIndex}
+      className={`mention-item ${isActive ? "is-active" : ""}`}
+      onMouseDown={(event) => {
+        event.preventDefault();
+      }}
+      onClick={() => {
+        onSelectOption(option.raw);
+      }}
+    >
+      {option.raw.label}
+    </div>
+  );
+});
 
 /**
  * mention 下拉：支持搜索、键盘导航和点击外部关闭。
@@ -44,9 +65,18 @@ function VariableMention({
   const [searchValue, setSearchValue] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const indexedVariables = useMemo(() => {
+    return variables.map((item, index) => ({
+      raw: item,
+      searchValue: String(item.value ?? "").toLowerCase(),
+      searchLabel: String(item.label ?? "").toLowerCase(),
+      key: `${item.value}-${item.label}-${index}`,
+    }));
+  }, [variables]);
+
   const options = useMemo(() => {
-    return filterMentionOptions(variables, searchValue);
-  }, [searchValue, variables]);
+    return filterMentionOptions(indexedVariables, searchValue);
+  }, [indexedVariables, searchValue]);
 
   const optionsCount = options.length;
 
@@ -80,39 +110,60 @@ function VariableMention({
     ? Math.min(activeIndex, optionsCount - 1)
     : 0;
 
-  const handleKeyDown = useCallback((event) => {
-    if (event.key === "ArrowDown") {
-      event.preventDefault();
-      if (!optionsCount) {
-        return;
-      }
-      setActiveIndex((prev) => (prev + 1) % optionsCount);
+  useEffect(() => {
+    if (!open || !optionsCount) {
       return;
     }
 
-    if (event.key === "ArrowUp") {
-      event.preventDefault();
-      if (!optionsCount) {
+    const activeOptionElement = containerRef.current?.querySelector(
+      `[data-option-index="${safeActiveIndex}"]`,
+    );
+    activeOptionElement?.scrollIntoView({ block: "nearest" });
+  }, [open, optionsCount, safeActiveIndex]);
+
+  const handleSelectOption = useCallback(
+    (option) => {
+      onSelect(option);
+    },
+    [onSelect],
+  );
+
+  const handleKeyDown = useCallback(
+    (event) => {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        if (!optionsCount) {
+          return;
+        }
+        setActiveIndex((prev) => (prev + 1) % optionsCount);
         return;
       }
-      setActiveIndex((prev) => (prev - 1 + optionsCount) % optionsCount);
-      return;
-    }
 
-    if (event.key === "Enter") {
-      event.preventDefault();
-      if (!isNavigableOptionIndex(safeActiveIndex, optionsCount)) {
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        if (!optionsCount) {
+          return;
+        }
+        setActiveIndex((prev) => (prev - 1 + optionsCount) % optionsCount);
         return;
       }
-       onSelect(options[safeActiveIndex]);
-       return;
-    }
 
-    if (event.key === "Escape") {
-      event.preventDefault();
-      onClose?.();
-    }
-  }, [onClose, onSelect, options, optionsCount, safeActiveIndex]);
+      if (event.key === "Enter") {
+        event.preventDefault();
+        if (!isNavigableOptionIndex(safeActiveIndex, optionsCount)) {
+          return;
+        }
+        onSelect(options[safeActiveIndex].raw);
+        return;
+      }
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose?.();
+      }
+    },
+    [onClose, onSelect, options, optionsCount, safeActiveIndex],
+  );
 
   if (!open) {
     return null;
@@ -148,23 +199,13 @@ function VariableMention({
             const isActive = index === safeActiveIndex;
 
             return (
-              <div
-                key={option.value}
-                className={`mention-item ${isActive ? "is-active" : ""}`}
-                onMouseDown={(event) => {
-                  event.preventDefault();
-                }}
-                onClick={() => {
-                  onSelect(option);
-                }}
-              >
-                <span>{option.label}</span>
-                <span className="mention-item-key">
-                  {isFunctionPreset(option)
-                    ? `配置${option.label}`
-                    : `{{${option.value}}}`}
-                </span>
-              </div>
+              <MentionOptionItem
+                key={option.key}
+                option={option}
+                optionIndex={index}
+                isActive={isActive}
+                onSelectOption={handleSelectOption}
+              />
             );
           })
         )}
