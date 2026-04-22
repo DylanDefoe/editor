@@ -122,7 +122,7 @@ export const patchLoopFunctionVariableAtPath = (editor, path, variableName) => {
 
   const parentPath = path.slice(0, -1);
   const index = path[path.length - 1];
-  if (typeof index === "number" && parentPath.length >= 0) {
+  if (typeof index === "number" && parentPath.length > 0) {
     patched =
       patchNodeVariableAtPath(
         editor,
