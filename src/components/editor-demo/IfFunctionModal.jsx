@@ -1,14 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
-import { Form, Mentions, Modal, Select } from "antd";
+import { useEffect, useState } from "react";
+import { Form, Modal, Select } from "antd";
+import MentionInput from "./MentionInput";
 
 const OPERATOR_OPTIONS = ["==", "!=", ">", ">=", "<", "<="];
-
-/**
- * 规范化条件左右值，移除空白和开头 mention 前缀。
- */
-const normalizeOperand = (value) => {
-  return (value || "").trim().replace(/^@+/, "");
-};
 
 /**
  * 将条件拆解成 left/operator/right 三段，供表单回填使用。
@@ -55,21 +49,15 @@ const parseConditionToFields = (condition) => {
  * 由表单值构造最终 condition。
  */
 const buildConditionFromFields = ({ leftOperand, operator, rightOperand }) => {
-  return `${normalizeOperand(leftOperand)} ${operator} ${normalizeOperand(rightOperand)}`;
+  return `${leftOperand} ${operator} ${rightOperand}`;
 };
 
-const normalizeMentionOption = (item) => {
-  const value = item?.value;
-  const label = item?.label ?? value;
+const hasInputValue = (value) => {
+  return Boolean(String(value || "").trim());
+};
 
-  if (value === undefined || value === null || value === "") {
-    return null;
-  }
-
-  return {
-    value,
-    label,
-  };
+const normalizeInputValue = (value) => {
+  return String(value || "").trim();
 };
 
 /**
@@ -85,12 +73,8 @@ function IfFunctionModal({
   const [form] = Form.useForm();
   const [saving, setSaving] = useState(false);
 
-  const mentionOptions = useMemo(() => {
-    return (variables ?? []).map(normalizeMentionOption).filter(Boolean);
-  }, [variables]);
-
   const validateMentionField = (_, value) => {
-    if (!normalizeOperand(value)) {
+    if (!hasInputValue(value)) {
       return Promise.reject(new Error("请输入内容"));
     }
 
@@ -99,7 +83,11 @@ function IfFunctionModal({
 
   const handleOk = async () => {
     const values = await form.validateFields();
-    const condition = buildConditionFromFields(values);
+    const condition = buildConditionFromFields({
+      ...values,
+      leftOperand: normalizeInputValue(values.leftOperand),
+      rightOperand: normalizeInputValue(values.rightOperand),
+    });
 
     try {
       setSaving(true);
@@ -137,9 +125,8 @@ function IfFunctionModal({
           label="左值"
           rules={[{ validator: validateMentionField }]}
         >
-          <Mentions
-            filterOption={(input, option) => option.label.includes(input)}
-            options={mentionOptions}
+          <MentionInput
+            variables={variables}
             placeholder="请输入左操作数"
           />
         </Form.Item>
@@ -163,9 +150,8 @@ function IfFunctionModal({
           label="右值"
           rules={[{ validator: validateMentionField }]}
         >
-          <Mentions
-            filterOption={(input, option) => option.label.includes(input)}
-            options={mentionOptions}
+          <MentionInput
+            variables={variables}
             placeholder="请输入右操作数"
           />
         </Form.Item>

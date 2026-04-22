@@ -40,5 +40,5 @@ export const isFunctionPreset = (preset) => {
  * 获取可用于 mention 的普通变量（排除函数预设）。
  */
 export const getMentionVariables = (presets = []) => {
-  return presets.filter((preset) => !isFunctionPreset(preset));
+  return presets.filter((preset) => preset.value !== 'systemFunc');
 };

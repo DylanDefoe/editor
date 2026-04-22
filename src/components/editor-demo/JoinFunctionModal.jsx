@@ -1,18 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
-import { Form, Input, Mentions, Modal } from "antd";
+import { useEffect, useState } from "react";
+import { Form, Input, Modal } from "antd";
+import MentionInput from "./MentionInput";
 
-const normalizeMentionOption = (item) => {
-  const value = item?.value;
-  const label = item?.label ?? value;
-
-  if (value === undefined || value === null || value === "") {
-    return null;
-  }
-
-  return {
-    value,
-    label,
-  };
+const hasInputValue = (value) => {
+  return Boolean(String(value || "").trim());
 };
 
 /**
@@ -33,13 +24,8 @@ function JoinFunctionModal({
   const [form] = Form.useForm();
   const [saving, setSaving] = useState(false);
 
-  const mentionOptions = useMemo(() => {
-    return (variables ?? []).map(normalizeMentionOption).filter(Boolean);
-  }, [variables]);
-
   const validateVariableName = (_, value) => {
-    const normalizedValue = String(value || "").trim().replace(/^@+/, "");
-    if (!normalizedValue) {
+    if (!hasInputValue(value)) {
       return Promise.reject(new Error("请输入变量"));
     }
 
@@ -52,8 +38,8 @@ function JoinFunctionModal({
     try {
       setSaving(true);
       await onSave?.({
-        variableName: String(values.variableName || "").trim().replace(/^@+/, ""),
-        separator: String(values.separator || ""),
+        variableName: String(values.variableName || "").trim(),
+        separator: String(values.separator || "").trim(),
       });
       form.resetFields();
     } finally {
@@ -90,11 +76,7 @@ function JoinFunctionModal({
           label="变量"
           rules={[{ validator: validateVariableName }]}
         >
-          <Mentions
-            filterOption={(input, option) => option.label.includes(input)}
-            options={mentionOptions}
-            placeholder="请输入变量名"
-          />
+          <MentionInput variables={variables} placeholder="请输入变量名" />
         </Form.Item>
 
         <Form.Item

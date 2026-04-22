@@ -1,25 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
-import { Form, Mentions, Modal } from "antd";
+import { useEffect, useState } from "react";
+import { Form, Modal } from "antd";
+import MentionInput from "./MentionInput";
 
-/**
- * 规范化变量值，移除空白和开头 mention 前缀。
- */
-const normalizeOperand = (value) => {
-  return (value || "").trim().replace(/^@+/, "");
+const hasInputValue = (value) => {
+  return Boolean(String(value || "").trim());
 };
 
-const normalizeMentionOption = (item) => {
-  const value = item?.value;
-  const label = item?.label ?? value;
-
-  if (value === undefined || value === null || value === "") {
-    return null;
-  }
-
-  return {
-    value,
-    label,
-  };
+const normalizeInputValue = (value) => {
+  return String(value || "").trim();
 };
 
 /**
@@ -40,12 +28,8 @@ function LoopFunctionModal({
   const [form] = Form.useForm();
   const [saving, setSaving] = useState(false);
 
-  const mentionOptions = useMemo(() => {
-    return (variables ?? []).map(normalizeMentionOption).filter(Boolean);
-  }, [variables]);
-
   const validateVariableField = (_, value) => {
-    if (!normalizeOperand(value)) {
+    if (!hasInputValue(value)) {
       return Promise.reject(new Error("请输入内容"));
     }
 
@@ -58,7 +42,7 @@ function LoopFunctionModal({
     try {
       setSaving(true);
       await onSave?.({
-        variableName: normalizeOperand(values.variableName),
+        variableName: normalizeInputValue(values.variableName),
       });
       form.resetFields();
     } finally {
@@ -94,11 +78,7 @@ function LoopFunctionModal({
           label="变量"
           rules={[{ validator: validateVariableField }]}
         >
-          <Mentions
-            filterOption={(input, option) => option.label.includes(input)}
-            options={mentionOptions}
-            placeholder="请输入变量"
-          />
+          <MentionInput variables={variables} placeholder="请输入变量" />
         </Form.Item>
       </Form>
     </Modal>
