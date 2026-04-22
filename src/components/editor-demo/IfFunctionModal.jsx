@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Form, Modal, Select } from "antd";
 import MentionInput from "./MentionInput";
 
-const OPERATOR_OPTIONS = ["==", "!=", ">", ">=", "<", "<="];
+const OPERATOR_OPTIONS = ["==", "!=", ">=", "<=", ">", "<"];
 
 /**
  * 将条件拆解成 left/operator/right 三段，供表单回填使用。
